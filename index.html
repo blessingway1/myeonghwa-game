@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script data-goatcounter="https://myeonghwa.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</head>
+<body style="margin:0">
+<title>명화 사건파일</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>
+/* Layout: a dim gallery wall. The painting hangs on the left as the scene of the case;
+   the investigator's dossier (clues, notes, verdict) sits beside it, or below it on a phone. */
+:root{
+  color-scheme:dark;
+  --wall:#191319; --wall-2:#221a21; --panel:#2a2028; --line:#4b3b46;
+  --ink:#f1e8d8; --ink-dim:#b9a999; --gilt:#d3ab55; --gilt-deep:#8f6f2c;
+  --paper:#eadfc9; --paper-ink:#2a2028; --seal:#c2463a;
+  --display:"Gowun Batang","Noto Serif KR","Apple SD Gothic Neo",serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{background:var(--wall);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,[tabindex]:focus-visible,input:focus-visible{outline:2px solid var(--gilt);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+.mono{font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase;font-size:11px;color:var(--ink-dim)}
+h1,h2,h3{font-family:var(--display);font-weight:700;margin:0;text-wrap:balance;line-height:1.3}
+
+/* ---------- home ---------- */
+.masthead{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:18px}
+.masthead h1{font-size:clamp(30px,6vw,46px);letter-spacing:-.01em}
+.masthead p{margin:6px 0 0;color:var(--ink-dim);max-width:46ch}
+.badge{min-width:220px;display:flex;flex-direction:column;gap:6px}
+.badge b{font-family:var(--display);font-size:18px;color:var(--gilt)}
+.xpbar{height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.xpbar i{display:block;height:100%;background:var(--gilt);transition:width .6s}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.sec-head h2{font-size:22px}
+.cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.case{display:flex;flex-direction:column;text-align:left;background:var(--wall-2);border:1px solid var(--line);padding:0;transition:transform .25s,border-color .25s}
+.case:hover{transform:translateY(-3px);border-color:var(--gilt-deep)}
+.case .thumb{position:relative;aspect-ratio:4/3;overflow:hidden;background:#000}
+.case .thumb img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.75) brightness(.72);transition:filter .4s,transform 6s}
+.case:hover .thumb img{filter:none;transform:scale(1.06)}
+.case.solved .thumb img{filter:none}
+.case .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px}
+.case h3{font-size:20px}
+.case .hook{color:var(--ink-dim);font-size:14px;margin:0}
+.case .meta{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:6px}
+.status{font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:3px 8px;border:1px solid var(--line);color:var(--ink-dim)}
+.status.done{border-color:var(--seal);color:var(--seal)}
+.stamp{position:absolute;right:10px;top:10px;font-family:var(--display);font-weight:700;color:var(--seal);border:2px solid var(--seal);padding:2px 10px;transform:rotate(8deg);background:rgba(25,19,25,.78);font-size:15px}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:14px}
+.card{background:var(--paper);color:var(--paper-ink);padding:8px 8px 10px;border:0;text-align:left;display:flex;flex-direction:column;gap:6px;position:relative}
+.card img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}
+.card b{font-family:var(--display);font-size:14px;line-height:1.3}
+.card span{font-size:11px;font-family:var(--mono);opacity:.75}
+.card .rk{position:absolute;right:12px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--seal);color:var(--paper);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:14px}
+.card.locked{background:transparent;border:1px dashed var(--line);color:var(--ink-dim);justify-content:center;align-items:center;min-height:210px;text-align:center}
+.card.locked b{font-size:30px;color:var(--line)}
+.note{color:var(--ink-dim);font-size:13px;margin:0}
+
+/* ---------- case ---------- */
+.topbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:12px}
+.topbar h2{font-size:20px;flex:1;min-width:0}
+.ghost{background:none;border:1px solid var(--line);padding:6px 12px}
+.ghost:hover{border-color:var(--gilt)}
+.counter{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;color:var(--gilt)}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:28px;align-items:start}
+.hang{display:flex;justify-content:center;min-width:0}
+.stage{--ratio:1;--cap:78vh;position:relative;width:min(100%,calc(var(--cap) * var(--ratio)));max-width:100%;aspect-ratio:var(--ratio);
+  overflow:hidden;background:#000;border:10px solid #3a2a1c;outline:1px solid var(--gilt-deep);box-shadow:0 30px 60px -20px #000;cursor:crosshair;perspective:1200px;touch-action:manipulation}
+.tilt,.zoom,.breathe{position:absolute;inset:0;transform-origin:0 0}
+.tilt{transform-origin:50% 50%;transition:transform .3s ease-out}
+.zoom{--z:1;transition:transform 1.1s cubic-bezier(.6,.05,.2,1)}
+.breathe{transform-origin:50% 50%;animation:breathe 16s ease-in-out infinite alternate}
+.stage.zoomed .breathe{animation-play-state:paused}
+.stage.zoomed{cursor:zoom-out}
+@keyframes breathe{from{transform:scale(1)}to{transform:scale(1.03) translate(-.4%,-.3%)}}
+.breathe img{position:absolute;inset:0;width:100%;height:100%;display:block;user-select:none;-webkit-user-drag:none}
+.motes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen}
+.fx{position:absolute;pointer-events:none;transform:translate(-50%,-50%);mix-blend-mode:screen}
+.fx.flame{width:2.6%;aspect-ratio:1/1.9;background:radial-gradient(ellipse at 50% 68%,#fff7d6 0,#ffc65e 38%,rgba(255,130,30,0) 72%);animation:flick .21s infinite alternate ease-in-out;transform-origin:50% 100%}
+.fx.halo{width:22%;aspect-ratio:1;background:radial-gradient(circle,rgba(255,196,110,.34) 0,rgba(255,170,80,0) 65%);animation:pulse 3.2s infinite alternate ease-in-out}
+.fx.glint{width:var(--w,9%);aspect-ratio:var(--ar,1);background:radial-gradient(ellipse,rgba(255,244,214,.42) 0,rgba(255,244,214,0) 68%);animation:pulse 4.5s infinite alternate ease-in-out;rotate:var(--rot,0deg)}
+@keyframes flick{from{transform:translate(-50%,-50%) scale(1,1) skewX(-3deg)}to{transform:translate(-50%,-50%) scale(.86,1.14) skewX(4deg)}}
+@keyframes pulse{from{opacity:.25}to{opacity:1}}
+.pin{position:absolute;transform:translate(-50%,-50%) scale(calc(1 / var(--z)));width:26px;height:26px;border-radius:50%;border:1.5px solid var(--gilt);background:rgba(25,19,25,.72);color:var(--gilt);font-family:var(--mono);font-size:12px;display:grid;place-items:center;padding:0}
+.ring{position:absolute;transform:translate(-50%,-50%);border:2px solid var(--gilt);border-radius:50%;pointer-events:none;animation:ring 1.1s ease-out 3}
+@keyframes ring{from{opacity:1;scale:.3}to{opacity:0;scale:1.25}}
+.miss{position:absolute;width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid var(--ink-dim);border-radius:50%;pointer-events:none;animation:ring .5s ease-out 1 forwards}
+.flash{position:absolute;inset:0;background:var(--paper);opacity:0;pointer-events:none}
+.flash.go{animation:flash .5s ease-out}
+@keyframes flash{from{opacity:.55}to{opacity:0}}
+
+.dossier{background:var(--panel);border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.dossier h3{font-size:21px}
+.brief{margin:0;color:var(--ink-dim)}
+.clues{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.clues li{display:flex;gap:12px;align-items:baseline;padding:9px 12px;border:1px solid var(--line);color:var(--ink-dim)}
+.clues li .n{font-family:var(--mono);font-size:12px;color:var(--gilt-deep)}
+.clues li.got{color:var(--ink);border-color:var(--gilt-deep);background:rgba(211,171,85,.07);cursor:pointer}
+.clues li.got .n{color:var(--gilt)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{background:var(--gilt);color:#1b1410;border:0;padding:10px 18px;font-weight:600}
+.btn:hover{filter:brightness(1.08)}
+.tag{display:inline-block;background:var(--paper);color:var(--paper-ink);font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:3px 9px;align-self:flex-start}
+.entry{display:flex;flex-direction:column;gap:4px}
+.entry .mono{color:var(--gilt)}
+.entry p{margin:0}
+.look{border-left:2px solid var(--gilt);padding:2px 0 2px 14px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;background:var(--wall-2);border:1px solid var(--line);padding:12px 14px}
+.opt:hover{border-color:var(--gilt)}
+.opt.no{animation:shake .35s;border-color:var(--seal);color:var(--ink-dim)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* special viewers inside a clue */
+.viewer{position:relative;height:200px;overflow:hidden;background:#000;border:1px solid var(--line)}
+.viewer img{position:absolute;max-width:none;display:block}
+.viewer.skull img{width:540px;left:calc(50% - 251px);top:calc(100px - 468px);transform-origin:46.5% 88%}
+.viewer.mirror img{width:1900px;left:calc(50% - 798px);top:calc(100px - 1240px)}
+.slide{display:flex;gap:12px;align-items:center;font-size:13px;color:var(--ink-dim)}
+.slide input{flex:1;accent-color:var(--gilt);min-width:0}
+
+/* ---------- verdict ---------- */
+.verdict{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:32px;align-items:start}
+.plate{background:var(--paper);color:var(--paper-ink);padding:12px 12px 16px;display:flex;flex-direction:column;gap:8px;position:relative;animation:drop .7s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes drop{from{transform:translateY(-30px) rotate(-4deg);opacity:0}to{transform:none;opacity:1}}
+.plate img{width:100%;display:block}
+.plate b{font-family:var(--display);font-size:18px}
+.plate small{font-family:var(--mono);font-size:11px}
+.seal{position:absolute;right:-10px;top:-14px;width:74px;height:74px;border-radius:50%;background:var(--seal);color:var(--paper);display:grid;place-items:center;text-align:center;font-family:var(--display);font-weight:700;line-height:1.05;transform:rotate(12deg);box-shadow:0 4px 0 rgba(0,0,0,.25)}
+.seal span{font-size:28px;display:block}
+.seal em{font-style:normal;font-size:10px;font-family:var(--mono)}
+.report{display:flex;flex-direction:column;gap:20px;max-width:62ch}
+.report h2{font-size:clamp(24px,4vw,32px)}
+.report ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.scoreline{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--ink-dim)}
+.scoreline b{color:var(--gilt);font-weight:500}
+
+/* ---------- one-scene hunts ---------- */
+.quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.qtile{display:flex;flex-direction:column;text-align:left;background:var(--wall-2);border:1px solid var(--line);padding:0;transition:border-color .25s}
+.qtile:hover{border-color:var(--gilt)}
+.qtile .thumb{aspect-ratio:16/10;overflow:hidden;background:#000}
+.qtile .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.qtile .body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px}
+.qtile b{font-family:var(--display);font-size:16px;line-height:1.4}
+#scene{display:flex;flex-direction:column;gap:18px}
+.scene-wrap{display:flex;justify-content:center}
+.phone{user-select:none;-webkit-user-select:none;position:relative;width:min(100%,calc(82vh * 9 / 16));aspect-ratio:9/16;background:#0e0a0e;border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column;container-type:inline-size}
+.ph-q,.ph-cap{word-break:keep-all}
+.ph-q{flex:0 0 23%;padding:0 6% 3%;display:flex;flex-direction:column;gap:6px;justify-content:flex-end;font-family:var(--display);font-weight:700;font-size:5.4cqw;line-height:1.35;text-wrap:balance}
+.ph-q .mono{font-size:2.6cqw}
+.ph-sub{font-family:var(--body);font-weight:400;font-size:3.7cqw;color:var(--gilt);min-height:1.5em}
+.ph-stage{position:relative;flex:1;min-height:0;overflow:hidden;cursor:crosshair;display:grid;place-items:center;container-type:size;touch-action:manipulation}
+.ph-pic{position:relative;width:min(100cqw,calc(100cqh * var(--ratio)));aspect-ratio:var(--ratio)}
+.ph-zoom{position:absolute;inset:0;transition:transform 1.8s cubic-bezier(.6,.05,.2,1)}
+.ph-zoom img{position:absolute;inset:0;width:100%;height:100%;display:block;user-select:none;-webkit-user-drag:none}
+.ph-count{position:absolute;right:5%;top:4%;font-family:var(--display);font-weight:700;font-size:44px;color:var(--gilt);text-shadow:0 2px 12px #000}
+.ph-inset{position:absolute;left:4%;right:4%;bottom:5%;border:1px solid var(--gilt);background:#000;opacity:0;transition:opacity .9s;pointer-events:none}
+.ph-inset.on{opacity:1}
+.ph-inset img{display:block;width:100%}
+.ph-inset .mono{position:absolute;left:6px;bottom:4px;font-size:9px;color:var(--paper);text-shadow:0 1px 3px #000}
+.ph-cap{flex:0 0 21%;padding:4% 6% 0;display:flex;flex-direction:column;gap:6px;font-size:4.1cqw;line-height:1.5}
+.ph-cap p{margin:0;opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s}
+.ph-cap p.on{opacity:1;transform:none}
+.ph-cap p.old{opacity:.38;transform:none;font-size:.86em}
+.ring.stay{border-width:3px;box-shadow:0 0 0 2px rgba(0,0,0,.55),0 0 18px rgba(211,171,85,.7);animation:stay 1s ease-in-out infinite alternate}
+@keyframes stay{from{opacity:.55;scale:.9}to{opacity:1;scale:1.06}}
+.row.center{justify-content:center}
+.note.center{text-align:center}
+.viewer.note{height:auto}
+.viewer.note img{position:static;width:100%}
+
+/* ---------- stats ---------- */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.tiles div{background:var(--wall-2);padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.tiles b{font-family:var(--display);font-size:28px;color:var(--gilt);font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-family:var(--mono);font-size:11px;font-weight:400;color:var(--ink-dim);letter-spacing:.04em}
+th:first-child,td:first-child{text-align:left}
+tbody tr:last-child td{border-bottom:0}
+#stats{display:flex;flex-direction:column;gap:20px}
+
+@media (max-width:880px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .stage{--cap:58vh;border-width:6px}
+  .verdict{grid-template-columns:minmax(0,1fr)}
+  .plate{max-width:300px}
+}
+@media (prefers-reduced-motion:reduce){
+  .breathe,.fx,.ring,.ring.stay,.plate{animation:none}
+  .ph-zoom{transition:none}
+  .zoom,.tilt{transition:none}
+}
+</style>
+
+<div class="wrap">
+  <section id="home"></section>
+  <section id="case" hidden></section>
+  <section id="verdict" hidden></section>
+  <section id="stats" hidden></section>
+  <section id="scene" hidden></section>
+</div>
+
+<script>
+const CASES = [
+{
+  id:'arnolfini', no:'CASE 01', img:'img/arnolfini.jpg', ratio:1920/2646,
+  name:'벽에 이름을 남긴 목격자',
+  work:'아르놀피니 부부의 초상', artist:'얀 반 에이크', year:'1434',
+  place:'런던 내셔널 갤러리 · 오크 패널에 유채 · 82 × 60 cm',
+  hook:'두 사람이 손을 맞잡은 방. 그런데 이 방에는 두 사람만 있던 것이 아니다.',
+  brief:'1434년 브뤼헤, 부유한 상인의 방. 남자는 손을 들고 여자는 손을 내민다. 방 안 물건들이 저마다 무언가를 말하고 있다. 그림을 눌러 단서 다섯 개를 찾아라.',
+  fx:[{k:'halo',x:41.9,y:6.2},{k:'flame',x:41.9,y:5.7},{k:'glint',x:50.4,y:29.5,w:'7%'}],
+  clues:[
+    {x:47.5,y:21.6,r:7,z:3.2,riddle:'누군가 벽에 글씨를 남겼다',title:'벽의 서명',
+     found:'거울 위 벽에 라틴어로 "Johannes de eyck fuit hic 1434"라고 적혀 있다. "얀 반 에이크가 여기 있었다, 1434년"이라는 뜻이다.',
+     behind:'당시 화가들은 보통 "누가 그렸다"고 서명했다. 반 에이크는 "여기 있었다"고 썼다. 서명이라기보다 현장에 있었다는 증언에 가깝고, 글씨도 공증 문서를 떠올리게 하는 장식 서체다.',
+     look:'그림 속 글자는 화가가 직접 남긴 말이다. 글자가 보이면 장식으로 넘기지 말고 먼저 읽어 보자.'},
+    {x:50.4,y:29.5,r:6.5,z:4.2,riddle:'방 안에 눈이 하나 더 있다',title:'볼록 거울',
+     found:'거울에는 부부의 뒷모습과 함께 문간에 선 두 사람이 더 비친다. 한 명은 파란 옷, 한 명은 붉은 옷이다.',
+     behind:'둘 중 한 명이 화가 자신이라는 해석이 유력하다. 바로 위의 서명과 짝을 이룬다. 거울 테두리의 작은 원 열 개에는 그리스도의 수난 장면이 들어 있다. 발치의 강아지는 거울 속에 없다.',
+     look:'거울, 창, 유리잔 같은 반사면을 찾자. 화가는 그림 바깥의 세계를 그 안에 숨겨 둔다.'},
+    {x:41.9,y:6.3,r:6.5,z:3.6,riddle:'대낮인데 켜져 있는 것',title:'한 자루의 촛불',
+     found:'창으로 햇빛이 드는 한낮인데 샹들리에에 촛불이 하나만 켜져 있다. 남자 쪽이다.',
+     behind:'오랫동안 신이 이 자리에 함께한다는 상징으로 읽혔다. 다른 가설은 더 서늘하다. 여자 쪽 촛대에는 다 타 버린 초의 흔적만 있다고 보고, 이 그림을 세상을 떠난 아내의 추모 초상으로 읽는다.',
+     look:'상황에 맞지 않는 사물은 상징일 가능성이 높다. "왜 굳이 이걸 그렸을까" 하고 물어보자.'},
+    {x:68,y:38,r:8,z:2.4,riddle:'모두가 오해하는 것',title:'불룩한 드레스',
+     found:'여자는 임신한 것처럼 보인다. 실제로는 무거운 옷자락을 손으로 모아 쥐고 있다.',
+     behind:'당시 상류층의 유행이었다. 옷감을 많이 쓸수록 부자였고, 초록 모직과 모피 안감은 큰 사치였다. 창가의 오렌지도 플랑드르에서는 귀한 수입 과일이었다. 방 전체가 재력을 보여 주고 있다.',
+     look:'옛 그림의 옷과 물건은 가격표다. 무엇이 비쌌는지 알면 주문자가 자랑하고 싶었던 것이 보인다.'},
+    {x:46.5,y:89.5,r:8,z:3,riddle:'발치의 작은 증인',title:'강아지',
+     found:'두 사람 사이 맨 앞에서 작은 개가 관람자를 똑바로 본다. 털이 한 올씩 그려져 있다.',
+     behind:'개는 흔히 충실함의 상징으로 읽히고, 값비싼 애완견이라 부의 표시이기도 했다. 반 에이크는 유화 물감을 얇게 여러 겹 올려 이런 질감을 냈다. 유화를 발명한 사람은 아니지만 그 가능성을 처음 끝까지 밀어붙인 화가로 꼽힌다.',
+     look:'가까이 가서 질감을 보자. 털, 금속, 유리를 어떻게 다르게 칠했는지가 화가의 솜씨다.'}
+  ],
+  q:'벽의 서명과 거울 속 두 사람. 둘을 합치면 무엇이 드러나는가?',
+  opts:['그림이 두 번에 걸쳐 그려졌다','화가가 이 방에 있었고, 자신을 목격자로 그려 넣었다','거울 속 인물이 이 그림의 주문자다'], a:1,
+  reveal:'반 에이크는 초상화를 그리면서 자신이 그 자리에 있었다는 사실까지 남겼다. 이름은 벽에, 모습은 거울에 있다. 화가가 그림 안에서 "내가 봤다"고 선언한 아주 이른 사례다.',
+  open:'이 그림이 무엇을 기록했는지는 지금도 합의가 없다. 1934년 미술사가 파노프스키가 결혼을 증명하는 그림이라고 주장했고 오래 정설이었다. 그런데 모델로 여겨지던 조반니 디 아리고 아르놀피니는 1447년에야 결혼했다는 기록이 1990년대에 확인됐다. 지금은 사촌 조반니 디 니콜라오 아르놀피니 부부로 보는 쪽이 우세하고, 1433년에 죽은 아내를 기리는 그림이라는 가설도 있다.',
+  steps:['전체를 본다. 두 사람의 손과 시선이 어디로 가는지 확인한다.','가운데를 세로로 훑는다. 샹들리에, 서명, 거울, 맞잡은 손, 강아지가 거의 한 줄에 놓여 있다.','거울 속으로 들어간다. 같은 방을 반대편에서 본다.']
+},
+{
+  id:'ambassadors', no:'CASE 02', img:'img/ambassadors.jpg', ratio:1920/1892,
+  name:'바닥의 얼룩',
+  work:'대사들', artist:'한스 홀바인 2세', year:'1533',
+  place:'런던 내셔널 갤러리 · 오크 패널에 유채 · 207 × 209.5 cm',
+  hook:'흠잡을 데 없는 초상화. 그런데 바닥에 정체 모를 얼룩이 길게 누워 있다.',
+  brief:'1533년 런던. 프랑스에서 온 두 젊은이가 과학 기구가 가득한 선반 앞에 섰다. 모든 것이 정밀한데 바닥의 한 군데만 이상하다. 그림을 눌러 단서 다섯 개를 찾아라.',
+  fx:[{k:'glint',x:46.5,y:88,w:'46%',ar:'5',rot:'-24deg'},{k:'glint',x:43.5,y:22.5,w:'9%'}],
+  clues:[
+    {x:46.5,y:88,r:10,z:2,riddle:'바닥에 길게 누운 얼룩',title:'일그러진 해골',widget:'skull',
+     found:'정면에서는 얼룩이다. 그림 오른쪽 끝에 바짝 붙어 비스듬히 보면 사람의 해골이 된다. 아래 슬라이더로 시점을 옮겨 보자.',
+     behind:'왜상(아나모르포시스)이라는 기법이다. 계단 옆에 걸어 지나가며 보게 했다는 설이 있지만 확인된 것은 아니다. 뜻은 분명하다. 메멘토 모리, 죽음을 기억하라.',
+     look:'그림 앞에서 움직여 보자. 정면이 유일한 감상 위치는 아니다.'},
+    {x:1.8,y:3.2,r:7,z:4.5,riddle:'커튼 뒤에 숨은 것',title:'반쯤 가려진 십자가',
+     found:'왼쪽 위 구석, 초록 커튼 틈으로 은빛 십자가상이 반만 보인다.',
+     behind:'화면에서 가장 눈에 띄지 않는 자리다. 해골이 죽음이라면 십자가는 그 너머의 구원을 가리킨다는 해석이 일반적이다. 종교 갈등으로 유럽이 갈라지던 때에 신앙이 가려져 있다는 뜻으로 읽기도 한다.',
+     look:'네 귀퉁이를 훑어보자. 화가는 중요한 것을 일부러 가장자리에 둘 때가 있다.'},
+    {x:66,y:60,r:9,z:2.4,riddle:'소리가 어긋난 악기',title:'줄 끊어진 류트',
+     found:'아래 선반의 류트는 줄 하나가 끊어져 있다. 옆에는 루터파 찬송가집이 펼쳐져 있다.',
+     behind:'류트는 조화의 상징이었으니 끊어진 줄은 불화다. 1533년은 헨리 8세가 앤 불린과 결혼하며 로마 교회와 갈라서던 해였고, 왼쪽의 댕트빌은 그 시기 런던에 와 있던 프랑스 대사였다. 오른쪽 드 셀브는 교회의 화해를 바라던 주교였다.',
+     look:'사물의 상태를 보자. 끊어짐, 시듦, 꺼짐, 엎어짐은 대개 메시지다.'},
+    {x:53,y:27,r:11,z:2.1,riddle:'하늘을 재는 도구들',title:'두 개의 선반',
+     found:'위 선반에는 천구의와 해시계처럼 하늘을 재는 기구가, 아래 선반에는 지구의와 산술책, 악기 같은 땅의 물건이 놓였다.',
+     behind:'천상과 지상, 당시 학문의 전 영역을 두 층으로 나눠 보여 준다. 두 사람이 얼마나 배운 사람인지 알리는 진열장이다. 아래 지구의에는 댕트빌의 영지 폴리시가 적혀 있다.',
+     look:'물건이 많은 그림은 분류해 보자. 위와 아래, 왼쪽과 오른쪽으로 나뉜 데는 이유가 있다.'},
+    {x:19.5,y:54,r:7,z:3.4,riddle:'나이를 새긴 물건',title:'단검의 숫자',
+     found:'댕트빌이 쥔 단검 칼집에 "AET. SVAE 29"라고 새겨져 있다. 그의 나이 스물아홉이다. 드 셀브가 팔을 올린 책 옆면에는 25가 적혀 있다.',
+     behind:'이토록 화려한 두 사람이 20대였다. 한창인 나이를 굳이 적은 것은 해골과 짝을 이룬다. 댕트빌의 모자에도 작은 해골 장식이 달려 있다.',
+     look:'숫자와 글자를 찾아 들여다보자. 초상화의 나이, 연도, 좌우명은 대개 소품에 숨어 있다.'}
+  ],
+  q:'해골, 끊어진 줄, 새겨진 나이. 이 화려한 초상화가 하려는 말은?',
+  opts:['부와 지식을 다 가져도 죽음은 피할 수 없다','두 대사는 곧 암살당할 것이다','과학이 종교를 이길 것이다'], a:0,
+  reveal:'〈대사들〉은 성공한 젊은이들의 자랑이면서 그 자랑을 뒤집는 그림이다. 정면에서는 부와 학식이 보인다. 비스듬히 서면 해골만 또렷해지고 나머지가 일그러진다. 두 시점은 동시에 볼 수 없다.',
+  open:'해골을 왜 이렇게 크게, 굳이 왜상으로 그렸는지는 기록이 없다. 걸릴 장소에 맞춘 설계라는 설이 있고, 홀바인이라는 이름이 독일어로 "속 빈 뼈"처럼 들린다는 데서 나온 말장난이라는 설도 있다.',
+  steps:['정면에서 본다. 옷과 자세로 신분을 읽는다. 왼쪽은 귀족, 오른쪽은 성직자다.','가운데 선반을 본다. 위는 하늘, 아래는 땅이다. 어긋난 물건을 찾는다.','오른쪽 끝에서 비스듬히 본다. 해골이 떠오르는 순간을 확인한다.']
+},
+{
+  id:'meninas', no:'CASE 03', img:'img/meninas.jpg', ratio:1920/2210,
+  name:'그림 밖에 선 사람',
+  work:'시녀들', artist:'디에고 벨라스케스', year:'1656',
+  place:'마드리드 프라도 미술관 · 캔버스에 유채 · 약 318 × 276 cm',
+  hook:'공주도, 시녀도, 화가도 그림 밖의 누군가를 보고 있다. 그들은 누구를 보는가.',
+  brief:'1656년 마드리드 알카사르 궁, 화가의 작업실. 다섯 살 공주와 시녀들이 모였고 화가는 붓을 든 채 멈췄다. 모두의 시선이 그림 밖을 향한다. 그림을 눌러 단서 다섯 개를 찾아라.',
+  fx:[{k:'glint',x:42,y:56.7,w:'8%',ar:'.8'},{k:'glint',x:57.5,y:55.5,w:'10%',ar:'.6'}],
+  clues:[
+    {x:42,y:56.7,r:6,z:4.2,riddle:'뒷벽에서 혼자 빛나는 액자',title:'거울 속 두 사람',widget:'mirror',
+     found:'뒷벽 액자들 중 하나만 밝다. 그림이 아니라 거울이고, 국왕 펠리페 4세와 왕비 마리아나가 비친다.',
+     behind:'왕과 왕비는 방 안 어디에도 없고 거울에만 있다. 거울이 비추는 것이 실제 왕 부부인지, 화가가 그리고 있는 캔버스 속 초상인지는 지금도 논쟁 중이다.',
+     look:'가장 밝은 곳을 따라가 보자. 화가는 빛으로 시선의 순서를 정한다.'},
+    {x:24,y:55.5,r:7,z:3.4,riddle:'붓을 든 남자의 가슴',title:'화가의 붉은 십자가',
+     found:'붓과 팔레트를 든 사람은 벨라스케스 자신이다. 가슴에 산티아고 기사단의 붉은 십자가가 있다.',
+     behind:'그가 기사단에 들어간 것은 1659년, 그림을 완성하고 3년 뒤다. 십자가는 나중에 덧그려졌다. 왕이 직접 그려 넣게 했다는 이야기가 전하지만 확인된 사실은 아니다. 손으로 일하는 장인 취급을 받던 화가가 귀족이 되기까지의 집념이 담긴 표식이다.',
+     look:'화가가 자신을 어디에, 어떤 모습으로 넣었는지 찾아보자. 그 시대 화가의 지위가 거기 있다.'},
+    {x:58.2,y:58,r:6,z:4,riddle:'떠나는가, 들어오는가',title:'문간의 남자',
+     found:'열린 문 계단에 한 남자가 서서 돌아본다. 왕비의 시종장 호세 니에토다.',
+     behind:'원근법의 소실점이 이 남자 근처에 있다. 방의 선들이 그의 팔 쪽으로 모인다. 그는 들어오는 중일까, 나가는 중일까. 벨라스케스는 답을 주지 않았다.',
+     look:'바닥과 벽, 천장의 선을 눈으로 이어 보자. 선이 모이는 점이 화가가 정해 둔 초점이다.'},
+    {x:48.5,y:66,r:7,z:2.8,riddle:'한가운데의 다섯 살',title:'마르가리타 공주',
+     found:'가장 밝은 빛을 받는 아이가 마르가리타 테레사 공주, 당시 다섯 살이다. 왼쪽 시녀가 붉은 토기 잔을 올린다.',
+     behind:'"라스 메니나스"는 공주를 모시는 어린 시녀들을 뜻하고, 이 제목은 19세기에 붙었다. 공주는 훗날 신성로마제국 황제 레오폴트 1세와 결혼했고 스물한 살에 세상을 떠났다. 벨라스케스가 그린 그녀의 초상들은 약혼 상대 집안에 성장 모습을 알리려고 빈으로 보내졌다.',
+     look:'가운데 인물이 반드시 주인공은 아니다. 주변 사람들의 몸짓과 시선이 누구를 향하는지 함께 보자.'},
+    {x:8,y:45,r:10,z:1.9,riddle:'우리에게 등을 돌린 것',title:'캔버스의 뒷면',
+     found:'화면 왼쪽을 통째로 차지한 것은 거대한 캔버스의 뒷면이다. 앞면은 끝내 볼 수 없다.',
+     behind:'그가 그리는 것이 왕 부부의 초상이라는 설이 있고, 지금 우리가 보는 바로 이 그림이라는 설도 있다. 실제 〈시녀들〉도 높이 3미터가 넘는다. 피카소는 1957년 이 그림 하나를 두고 58점의 변주를 그렸다.',
+     look:'가려 둔 것이 무엇인지 물어보자. 감춘 부분이 그림의 질문일 때가 많다.'}
+  ],
+  q:'거울에 왕과 왕비가 비친다. 그렇다면 두 사람이 서 있는 자리는 어디인가?',
+  opts:['캔버스 뒤 왼쪽 구석','문밖 계단 위','지금 이 그림을 보는 당신의 자리'], a:2,
+  reveal:'모두가 바라보는 곳, 거울이 비추는 곳은 그림 앞, 관람자가 서는 자리다. 벨라스케스는 그림을 보는 사람을 왕의 자리에 세웠다. 당신은 구경꾼이면서 그림 속 사람들이 바라보는 대상이 된다.',
+  open:'거울이 실제 왕 부부를 비추는지 캔버스를 비추는지, 화가가 무엇을 그리는 중인지는 350년 넘게 풀리지 않았다. 철학자 푸코가 《말과 사물》 첫 장을 이 그림 분석에 쓴 이유다.',
+  steps:['시선을 센다. 그림 속 인물 가운데 몇 명이 당신을 보는지 확인한다.','빛을 따라간다. 오른쪽 창, 공주, 뒷벽 거울, 열린 문 순서로 밝은 곳을 잇는다.','자리를 생각한다. 내가 선 곳이 누구의 자리인지 떠올린다.']
+},
+{
+  id:'nightwatch', no:'CASE 04', img:'img/nightwatch.jpg', ratio:1920/1562,
+  name:'밤이 아니었던 밤',
+  work:'야경', artist:'렘브란트 판 레인', year:'1642',
+  place:'암스테르담 국립미술관 · 캔버스에 유채 · 379.5 × 453.5 cm',
+  hook:'세상에서 가장 유명한 밤 풍경. 그런데 이 그림 속 시간은 밤이 아니다.',
+  brief:'1642년 암스테르담. 시민 민병대가 출동하려 한다. 다들 제각각 움직이는데 유독 한 소녀만 환하게 빛난다. 그림을 눌러 단서 다섯 개를 찾아라.',
+  fx:[{k:'glint',x:31,y:61,w:'12%'}],
+  clues:[
+    {x:55,y:67,r:9,z:2.8,riddle:'옷 위에 떨어진 손 그림자',title:'대장의 손 그림자',
+     found:'검은 옷의 대장이 내민 손의 그림자가 옆에 선 부관의 노란 옷자락에 또렷이 떨어져 있다.',
+     behind:'강한 빛이 왼쪽 위에서 들어오고 있다는 뜻이다. 이 장면은 밤이 아니다. "야경"이라는 이름은 화가가 붙인 것이 아니고, 표면의 바니시가 어둡게 변한 뒤에 생긴 별명이다. 1940년대에 묵은 바니시를 걷어 내자 그림이 훨씬 밝아졌지만 이름은 그대로 남았다.',
+     look:'그림자의 방향과 진하기를 보자. 빛이 어디서 오는지, 몇 시쯤인지 알 수 있다.'},
+    {x:31,y:61,r:5.5,z:3.6,riddle:'군인들 사이에서 혼자 빛나는 아이',title:'황금빛 소녀',
+     found:'무장한 남자들 사이에 금빛 옷을 입은 소녀가 있다. 허리에는 죽은 닭이 거꾸로 매달려 있다.',
+     behind:'닭의 발톱은 이 부대의 상징이었다. 화승총 부대를 뜻하는 이름이 "발톱"이라는 말과 닮았기 때문이다. 소녀는 실제 인물이라기보다 부대의 표지에 가깝다. 얼굴이 그해 세상을 떠난 화가의 아내 사스키아를 닮았다는 이야기도 있지만 추측이다.',
+     look:'장면과 어울리지 않는 인물을 찾자. 사람이 아니라 상징으로 서 있을 때가 있다.'},
+    {x:63,y:14,r:8,z:3.2,riddle:'문 위에 걸린 명단',title:'이름이 적힌 방패',
+     found:'뒤쪽 아치 위에 타원형 방패가 걸려 있고, 그 안에 이름 열여덟 개가 적혀 있다.',
+     behind:'이 그림은 단체 초상화이고 대원들이 돈을 나눠 냈다. 기록에 따르면 한 사람당 100길더 안팎이었다. 방패는 렘브란트가 그린 것이 아니고 나중에 덧붙여졌다. 같은 돈을 내고도 누구는 한가운데에, 누구는 어둠 속에 그려졌다.',
+     look:'단체 초상화에서는 누가 앞에 있고 누가 가려졌는지 보자. 그 배치가 화가의 선택이다.'},
+    {x:19,y:55,r:6.5,z:3,riddle:'붉은 옷의 남자가 하는 일',title:'총을 다루는 세 동작',
+     found:'붉은 옷의 대원이 화승총에 화약을 넣고 있다. 대장 뒤에서는 누군가 총을 쏘고, 부관 옆 남자는 화약 접시를 불어 낸다.',
+     behind:'장전, 발사, 청소. 당시 무기 교본에 실린 동작을 그대로 옮겼다. 줄 맞춰 선 기념사진 같던 민병대 초상화를 렘브란트는 움직이는 한 장면으로 바꿨다.',
+     look:'비슷한 옷을 입은 사람들이 각자 무엇을 하는지 차례로 보자. 정지한 그림에서 시간이 읽힌다.'},
+    {x:3.5,y:55,r:7,z:2.6,riddle:'그림이 끝나는 자리가 이상하다',title:'잘려 나간 왼쪽',
+     found:'왼쪽 끝 인물들이 가장자리에 바짝 붙어 있다. 원래 그림은 여기서 끝나지 않았다.',
+     behind:'1715년 이 그림을 암스테르담 시청으로 옮길 때 벽에 맞지 않아 네 변을 잘라 냈다. 왼쪽에서만 약 60센티미터와 인물 두 명이 사라졌다. 잘린 조각은 찾지 못했다. 2021년 미술관은 17세기 모사본을 바탕으로 사라진 부분을 인공지능으로 복원해 임시로 붙여 전시했다.',
+     look:'그림의 가장자리를 보자. 인물이 어색하게 끊기면 그림이 잘렸을 수 있다.'}
+  ],
+  q:'부관의 옷에 떨어진 손 그림자가 증명하는 것은?',
+  opts:['대장이 부관을 가리키며 꾸짖고 있다','이 장면은 밤이 아니라 낮이다','그림이 두 화가의 손으로 완성됐다'], a:1,
+  reveal:'〈야경〉은 낮에 출동하는 민병대를 그린 그림이다. 정식 이름은 "프란스 반닝 코크 대장의 민병대"에 가깝다. 어두워진 바니시 때문에 밤 그림으로 알려졌고, 그 이름이 지금까지 남았다.',
+  open:'이 그림 때문에 렘브란트가 몰락했다는 이야기가 유명하지만 근거가 약하다. 그는 대금을 받았고 주문도 이어졌다. 그의 파산은 14년 뒤의 일이고 원인은 여러 가지였다.',
+  steps:['한가운데 두 사람을 본다. 검은 옷과 노란 옷의 대비가 화면의 중심이다.','빛을 따라간다. 대장의 손, 부관의 옷, 소녀가 차례로 밝다.','가장자리와 어둠 속 얼굴들을 본다. 누가 가려졌는지 확인한다.']
+},
+{
+  id:'proverbs', no:'CASE 05', img:'img/proverbs.jpg', ratio:1920/1360,
+  name:'거꾸로 된 마을',
+  work:'네덜란드 속담', artist:'피터르 브뤼헐', year:'1559',
+  place:'베를린 국립회화관 · 오크 패널에 유채 · 117 × 163 cm',
+  hook:'평범한 시골 마을처럼 보인다. 그런데 마을 사람 모두가 이상한 짓을 하고 있다.',
+  brief:'1559년 플랑드르의 어느 마을. 누구는 벽에 머리를 박고 누구는 지붕에 파이를 깔았다. 이 그림에는 속담이 백 개 넘게 숨어 있다. 그림을 눌러 단서 다섯 개를 찾아라.',
+  fx:[{k:'glint',x:88,y:2.5,w:'12%'}],
+  clues:[
+    {x:5,y:42,r:6,z:4,riddle:'간판 자리에 걸린 둥근 것',title:'뒤집힌 지구본',
+     found:'왼쪽 집 벽에 파란 지구본이 걸려 있다. 십자가가 아래를 향한다. 거꾸로 달린 것이다.',
+     behind:'"세상이 거꾸로 됐다"는 뜻이다. 이 한 점이 그림 전체의 제목 구실을 한다. 이 마을에서 벌어지는 일은 모두 뒤집힌 세상의 풍경이다.',
+     look:'그림 전체를 설명하는 열쇠가 되는 사물이 있는지 찾아보자. 대개 눈에 띄지 않는 가장자리에 있다.'},
+    {x:20.5,y:80,r:5,z:4,riddle:'가장 아픈 방법으로 고집부리기',title:'벽에 머리 박기',
+     found:'흰 셔츠의 남자가 벽돌 벽에 머리를 들이박고 있다. 한쪽 발에만 신을 신었다.',
+     behind:'불가능한 일을 억지로 밀어붙인다는 속담이다. 오늘날에도 여러 언어에서 같은 표현을 쓴다. 450년이 지나도 통하는 속담이 이 그림에 여럿 있다.',
+     look:'인물의 행동을 문장으로 말해 보자. 풍속화는 말을 그림으로 옮긴 것일 때가 많다.'},
+    {x:25,y:67,r:5,z:4,riddle:'갑옷까지 입고 하는 일',title:'고양이 목에 방울 달기',
+     found:'온몸에 갑옷을 두른 남자가 고양이 목에 방울을 달고 있다.',
+     behind:'속담 두 개가 겹쳐 있다. 하나는 우리도 아는 "고양이 목에 방울 달기", 다른 하나는 "이빨까지 무장했다"이다. 브뤼헐은 한 인물에 속담을 여러 개 싣기도 했다.',
+     look:'한 장면에 뜻이 하나라고 단정하지 말자. 겹쳐 읽을 수 있는지 살펴보자.'},
+    {x:47,y:72,r:6,z:3.4,riddle:'화면 한가운데의 파란 옷',title:'파란 망토',
+     found:'붉은 옷의 젊은 여자가 늙은 남편에게 파란 망토를 씌워 주고 있다.',
+     behind:'남편 몰래 바람을 피운다는 뜻이다. 파란색은 속임수의 색이었다. 이 그림은 한때 "파란 망토"라는 제목으로 불렸다. 화면 한가운데에 놓인 것이 우연이 아니다.',
+     look:'색에도 뜻이 있다. 시대와 지역마다 색이 무엇을 뜻했는지 알면 그림이 달리 보인다.'},
+    {x:70,y:44,r:6,z:4,riddle:'물속의 먹이사슬',title:'큰 물고기와 작은 물고기',
+     found:'강에서 큰 물고기가 작은 물고기를 삼키고 있다.',
+     behind:'"큰 물고기가 작은 물고기를 먹는다." 힘센 자가 약한 자를 삼킨다는 뜻이다. 브뤼헐은 2년 전에 같은 주제로 판화 밑그림도 그렸다. 그가 살던 안트베르펜은 유럽에서 손꼽히는 무역 도시였다.',
+     look:'화가가 같은 주제를 다른 작품에서도 다뤘는지 찾아보자. 반복되는 주제가 그 화가의 관심사다.'}
+  ],
+  q:'지구본은 거꾸로 걸렸고 사람들은 모두 헛된 짓을 한다. 화가가 그린 것은 무엇인가?',
+  opts:['즐거운 마을 축제의 기록','어리석음으로 뒤집힌 인간 세상','농민들의 고된 노동'], a:1,
+  reveal:'〈네덜란드 속담〉은 속담 사전이면서 인간의 어리석음을 모은 지도다. 브뤼헐은 꾸짖지 않고 늘어놓는다. 보는 사람은 웃다가 그 안에서 자기 모습을 찾게 된다.',
+  open:'속담이 정확히 몇 개인지는 세는 사람마다 다르다. 백 개 남짓에서 백이십여 개까지 나온다. 뜻이 잊혀서 지금은 읽지 못하는 장면도 있다.',
+  steps:['멀리서 본다. 왼쪽 집, 가운데 광장, 오른쪽 물가로 구역이 나뉜다.','한 사람씩 본다. 무엇을 하는지 한 문장으로 말해 본다.','아는 속담을 찾는다. 우리말 속담과 같은 것이 몇 개인지 센다.']
+},
+{
+  id:'garden', no:'CASE 06', img:'img/garden.jpg', ratio:1920/1093,
+  name:'세 폭의 경고',
+  work:'쾌락의 정원', artist:'히에로니무스 보스', year:'1490~1510년경',
+  place:'마드리드 프라도 미술관 · 오크 패널에 유채 · 펼친 크기 약 206 × 385 cm',
+  hook:'500년 전 그림인데 초현실주의처럼 보인다. 세 폭을 순서대로 읽으면 이야기가 드러난다.',
+  brief:'1500년 무렵 네덜란드. 세 폭짜리 그림에 벌거벗은 사람들과 거대한 과일, 괴물이 가득하다. 왼쪽은 밝고 오른쪽은 어둡다. 그림을 눌러 단서 다섯 개를 찾아라.',
+  fx:[{k:'glint',x:50,y:25,w:'8%'}],
+  clues:[
+    {x:13,y:72,r:6,z:3.6,riddle:'첫 번째 폭의 세 사람',title:'에덴의 첫 만남',
+     found:'왼쪽 폭 아래에서 신이 이브의 손목을 잡고 아담에게 데려온다. 아담은 막 깨어나 이브를 올려다본다.',
+     behind:'이야기의 출발점인 낙원이다. 그런데 자세히 보면 낙원에서도 고양이가 먹잇감을 물어 가고 연못에서는 이상한 짐승들이 기어 나온다. 타락의 씨앗이 이미 심겨 있다.',
+     look:'여러 폭으로 된 그림은 왼쪽부터 읽자. 대개 시간 순서대로 놓여 있다.'},
+    {x:47,y:43,r:7,z:3.4,riddle:'연못을 도는 행렬',title:'원을 그리는 기수들',
+     found:'가운데 폭에서 벌거벗은 남자들이 온갖 짐승을 타고 연못 둘레를 돈다. 연못 안에는 여자들이 있다.',
+     behind:'끝없이 맴도는 원은 욕망에 끌려 다니는 모습으로 읽힌다. 가운데 폭에는 늙은이도 아이도 없다. 일하는 사람도 없다. 사람들은 거대한 딸기와 체리를 탐한다. 금방 물러 버리는 과일은 덧없는 쾌락을 뜻한다고 본다.',
+     look:'그림에 없는 것을 찾아보자. 빠진 것이 화가의 의도일 수 있다.'},
+    {x:86,y:40,r:6,z:3.6,riddle:'지옥에서 뒤를 돌아보는 얼굴',title:'나무 인간',
+     found:'오른쪽 폭 한가운데에 깨진 달걀 같은 몸통과 나무줄기 다리를 가진 괴물이 있다. 얼굴만 사람이고, 어깨 너머로 뒤를 본다.',
+     behind:'이 얼굴이 보스의 자화상이라는 추측이 오래 이어졌다. 증거는 없다. 보스에 관한 기록은 거의 남아 있지 않고, 이 그림에는 서명도 날짜도 없다.',
+     look:'괴물이나 군중 속에서 혼자 표정이 다른 얼굴을 찾자. 화가가 자신을 넣는 자리가 흔히 그런 곳이다.'},
+    {x:80,y:69,r:6,z:4,riddle:'악기에 깔린 사람의 몸에 적힌 것',title:'엉덩이의 악보',
+     found:'거대한 류트와 하프가 형틀이 됐다. 류트에 깔린 사람의 엉덩이에 악보가 그려져 있다.',
+     behind:'2014년 미국의 한 대학생이 이 악보를 옮겨 적어 연주해 인터넷에 올렸고 큰 화제가 됐다. 세속 음악과 춤은 당시 교회가 경계한 쾌락이었다. 지옥에서는 즐기던 것이 고문 도구가 된다.',
+     look:'지옥이나 심판 장면에서는 벌의 종류를 보자. 어떤 죄를 겨냥한 그림인지 알 수 있다.'},
+    {x:94,y:69,r:5.5,z:4,riddle:'의자에 앉아 식사하는 새',title:'새 머리의 왕',
+     found:'새 머리를 한 괴물이 높은 의자에 앉아 사람을 삼키고 아래 구멍으로 떨어뜨린다. 머리에는 솥을 썼다.',
+     behind:'지옥의 군주로 불리는 인물이다. 주변에는 도박꾼, 술꾼, 구두쇠가 각자 벌을 받고 있다. 왼쪽 폭의 낙원에서 시작한 이야기가 여기서 끝난다.',
+     look:'이야기의 끝이 어디인지 확인하자. 화가가 하려는 말은 대개 마지막 장면에 있다.'}
+  ],
+  q:'낙원, 쾌락의 정원, 지옥. 세 폭을 왼쪽부터 읽으면 무엇이 되는가?',
+  opts:['서로 다른 세 나라의 풍경','쾌락을 좇은 인간이 맞는 결말에 대한 경고','화가가 꾼 꿈 세 가지의 기록'], a:1,
+  reveal:'가장 널리 받아들여지는 읽기는 이렇다. 신이 만든 낙원에서 시작해 인간이 쾌락에 빠지고 지옥에서 값을 치른다. 날개를 닫으면 바깥에는 천지창조 때의 지구가 회색으로 그려져 있다.',
+  open:'가운데 폭이 죄를 꾸짖는 것인지, 타락 이전의 순수한 세계를 그린 것인지는 지금도 논쟁한다. 주문자가 누구였는지, 어디에 걸려 있었는지도 확실하지 않다. 교회 제단화로 보기에는 내용이 지나치게 낯설다.',
+  steps:['세 폭의 밝기를 비교한다. 왼쪽에서 오른쪽으로 갈수록 어두워진다.','가운데 폭을 위아래로 나눠 본다. 위는 기이한 건축물, 가운데는 연못의 행렬, 아래는 사람과 과일이다.','오른쪽 폭에서 일상의 물건을 찾는다. 악기, 칼, 주사위가 무엇으로 변했는지 본다.']
+},
+{
+  id:'scream', no:'CASE 07', img:'img/scream.jpg', ratio:1920/2383,
+  name:'하늘에 적힌 한 줄',
+  work:'절규', artist:'에드바르 뭉크', year:'1893',
+  place:'오슬로 노르웨이 국립미술관 · 판지에 템페라와 크레용 · 91 × 73.5 cm',
+  hook:'누구나 아는 얼굴. 그런데 이 사람은 비명을 지르고 있는 것이 아니다.',
+  brief:'1893년 노르웨이. 핏빛 하늘 아래 다리 위에서 한 사람이 귀를 감싸 쥐고 있다. 하늘 어딘가에는 연필로 쓴 글씨가 숨어 있다. 그림을 눌러 단서 다섯 개를 찾아라.',
+  fx:[{k:'glint',x:50,y:12,w:'70%',ar:'4'}],
+  clues:[
+    {x:27.5,y:14.7,r:9,z:3.4,riddle:'붉은 하늘 속 연필 글씨',title:'숨은 낙서',widget:'note',
+     found:'왼쪽 위 붉은 하늘에 연필로 아주 작게 한 줄이 적혀 있다. "미친 사람만이 그릴 수 있다."',
+     behind:'오랫동안 화난 관람객의 낙서로 여겨졌다. 2021년 미술관이 적외선 촬영과 필적 비교를 거쳐 뭉크 자신의 글씨라고 발표했다. 1895년 전시에서 그의 정신 상태를 의심하는 말이 나온 뒤에 적은 것으로 본다.',
+     look:'그림 표면의 낙서와 흔적도 작품의 역사다. 누가, 언제 남겼는지가 이야기가 된다.'},
+    {x:55,y:56,r:7,z:3,riddle:'입을 벌린 얼굴이 하는 일',title:'귀를 막은 사람',
+     found:'가운데 인물은 두 손으로 귀를 감싸고 있다. 머리카락도 없고 남자인지 여자인지도 알 수 없다.',
+     behind:'뭉크는 이렇게 적었다. "자연을 꿰뚫는 끝없는 비명을 느꼈다." 비명을 지르는 쪽은 자연이고, 이 사람은 그 소리를 막고 있다. 독일어 원제도 "자연의 비명"이다. 얼굴 모양이 파리에서 전시된 페루 미라에서 왔다는 가설도 있다.',
+     look:'제목과 화가의 글을 함께 읽자. 눈에 보이는 것과 다른 이야기가 나올 때가 있다.'},
+    {x:6,y:41,r:7,z:3.6,riddle:'다리 끝의 두 사람',title:'걸어가는 친구들',
+     found:'다리 왼쪽 끝에 모자를 쓴 두 사람이 등을 보이며 걸어간다.',
+     behind:'뭉크의 일기에 이 장면이 있다. 해 질 무렵 친구 둘과 걷다가 혼자 멈춰 섰고, 친구들은 계속 걸어갔다. 그는 불안에 떨며 서 있었다. 두 사람은 아무것도 느끼지 못한 바깥세상이다.',
+     look:'주인공과 다르게 행동하는 인물을 찾자. 대비가 주인공의 상태를 설명한다.'},
+    {x:62,y:14,r:10,z:2.2,riddle:'하늘은 왜 이런 색인가',title:'핏빛 하늘',
+     found:'하늘이 붉은색과 노란색 띠로 물결친다. 뭉크는 "구름이 피처럼 붉어졌다"고 썼다.',
+     behind:'실제로 본 하늘이라는 설이 있다. 1883년 크라카타우 화산 폭발 뒤 유럽에서도 몇 달간 붉은 노을이 보였다. 드문 구름 현상이라는 설도 있고, 불안한 마음을 그린 것이라는 해석도 있다.',
+     look:'현실과 다른 색을 만나면 화가가 무엇을 느꼈는지 생각해 보자. 색은 사실보다 감정을 따를 때가 있다.'},
+    {x:37,y:36,r:7,z:3.6,riddle:'멀리 떠 있는 작은 배',title:'피오르와 도시',
+     found:'소용돌이치는 푸른 물 위에 작은 배가 두 척 떠 있다. 오슬로 피오르다.',
+     behind:'장소는 오슬로가 내려다보이는 에케베르그 언덕으로 알려져 있다. 근처에는 뭉크의 여동생 라우라가 입원한 정신병원이 있었다. 뭉크는 어머니와 누나를 일찍 결핵으로 잃었다.',
+     look:'배경이 실제 장소인지 알아보자. 그 장소가 화가에게 무엇이었는지가 단서가 된다.'}
+  ],
+  q:'그림 속 인물은 무엇을 하고 있는가?',
+  opts:['다리 위에서 살려 달라고 소리친다','자연을 꿰뚫는 비명을 듣고 귀를 막는다','뒤따라오는 두 사람에게서 달아난다'], a:1,
+  reveal:'〈절규〉는 비명을 지르는 사람이 아니라 비명을 듣는 사람의 그림이다. 뭉크는 풍경을 그리지 않고 풍경 앞에서 느낀 공포를 그렸다. 그래서 하늘도 물도 사람도 같은 물결로 흔들린다.',
+  open:'〈절규〉는 한 점이 아니다. 회화와 파스텔로 네 점이 있고 판화도 있다. 그중 두 점이 1994년과 2004년에 도난당했다가 되찾았다. 하늘이 실제 현상이었는지는 아직 결론이 없다.',
+  steps:['선을 본다. 하늘과 물은 굽이치고 다리만 직선이다.','다리를 따라간다. 난간이 화면 깊숙이 꽂히며 두 사람에게 이른다.','얼굴로 돌아온다. 굽은 선과 곧은 선이 만나는 자리에 이 사람이 서 있다.']
+},
+{
+  id:'bar', no:'CASE 08', img:'img/bar.jpg', ratio:1920/1434,
+  name:'거울이 맞지 않는다',
+  work:'폴리베르제르의 술집', artist:'에두아르 마네', year:'1882',
+  place:'런던 코톨드 갤러리 · 캔버스에 유채 · 96 × 130 cm',
+  hook:'바 앞에 선 여자와 뒤의 커다란 거울. 그런데 거울에 비친 모습이 앞뒤가 맞지 않는다.',
+  brief:'1882년 파리의 유명한 공연장. 종업원이 대리석 바에 손을 짚고 정면을 본다. 뒤는 전부 거울이다. 그림을 눌러 단서 다섯 개를 찾아라.',
+  fx:[{k:'glint',x:8.5,y:12.5,w:'9%'},{k:'glint',x:64.5,y:12.5,w:'8%'}],
+  clues:[
+    {x:86,y:35,r:9,z:2.2,riddle:'있어야 할 자리에 없는 뒷모습',title:'어긋난 반영',
+     found:'여자의 뒷모습이 오른쪽으로 멀찍이 밀려나 있다. 그 앞에는 모자 쓴 신사가 서 있다. 정면에서 봤다면 뒷모습은 여자 바로 뒤에 있어야 한다.',
+     behind:'발표 때부터 원근법을 틀렸다는 비판을 받았다. 2000년에는 비스듬한 위치에서 보면 이 장면이 실제로 가능하다는 재현 실험이 나왔다. 그래도 화가가 일부러 어긋나게 그렸다는 해석이 여전히 많다.',
+     look:'거울이 나오면 반영이 맞는지 따져 보자. 틀린 곳이 있으면 거기에 의도가 있다.'},
+    {x:49,y:17,r:7,z:3,riddle:'시끄러운 곳에서 혼자 조용한 것',title:'종업원의 얼굴',
+     found:'여자는 정면을 보지만 눈에 초점이 없다. 뒤의 떠들썩한 객석과 따로 떨어져 있다.',
+     behind:'모델은 실제로 그 술집에서 일하던 쉬종이다. 마네는 작업실에 바를 차려 놓고 그녀를 세웠다. 당시 그는 병이 깊어 오래 서 있지 못했다. 이 그림은 그의 마지막 대작이 됐고 그는 이듬해 세상을 떠났다.',
+     look:'인물의 표정과 주변 분위기가 맞는지 비교하자. 어긋나는 곳에 그림의 정서가 있다.'},
+    {x:5,y:4,r:6,z:4.5,riddle:'왼쪽 위 구석의 초록 신발',title:'공중그네의 발',
+     found:'왼쪽 위 구석에 초록 신을 신은 두 다리가 그네에 걸려 있다. 곡예사의 몸은 화면 밖으로 잘렸다.',
+     behind:'지금 공연이 한창이라는 표시다. 그런데 아무도 쳐다보지 않는다. 폴리베르제르는 곡예와 음악, 술을 한자리에서 파는 곳이었다. 마네는 구경거리를 구석으로 밀고 일하는 사람을 한가운데에 세웠다.',
+     look:'화면 가장자리에서 잘린 것을 찾자. 화가가 중요하지 않다고 본 것이 거기 있다.'},
+    {x:6,y:80,r:7,z:3.4,riddle:'병에 붙은 상표',title:'술병의 서명과 빨간 삼각형',
+     found:'맨 왼쪽 붉은 병의 상표에 "Manet 1882"라고 적혀 있다. 그 옆 갈색 병에는 빨간 삼각형이 있다.',
+     behind:'마네는 상품의 상표에 서명했다. 빨간 삼각형은 영국 맥주 배스의 상표로, 1876년 영국에서 가장 먼저 등록된 상표로 알려져 있다. 진짜 브랜드를 그림에 그대로 넣은 이른 사례다.',
+     look:'화가의 서명을 찾아보자. 어디에 어떻게 넣었는지에 화가의 태도가 담긴다.'},
+    {x:74,y:72,r:7,z:3,riddle:'유리 그릇 속의 과일',title:'귤 그릇',
+     found:'바 위 유리 그릇에 귤이 담겨 있다. 술병들과 나란히 팔려고 놓은 것이다.',
+     behind:'바 위의 술과 과일은 모두 상품이다. 그 뒤에 선 여자도 상품처럼 놓였다고 읽는 연구자들이 있다. 당시 이런 곳의 종업원은 성매매와 연결돼 있다는 시선을 받았고, 거울 속 신사와의 대화가 그런 암시라는 해석이다.',
+     look:'정물은 배경으로 넘기지 말자. 인물과 같은 줄에 놓였다면 뜻이 이어진다.'}
+  ],
+  q:'거울 속에서 여자와 마주 선 신사. 그가 실제로 서 있어야 할 자리는 어디인가?',
+  opts:['객석 2층 난간','그림 앞, 지금 당신이 선 자리','바 오른쪽 옆'], a:1,
+  reveal:'거울 속 신사는 그림 앞에 선 사람이다. 관람자는 손님 자리에 서서 그녀와 마주 본다. 마네가 존경한 벨라스케스의 〈시녀들〉과 같은 장치다. 정면의 그녀는 무표정한데 거울 속 그녀는 손님 쪽으로 몸을 기울이고 있다.',
+  open:'어긋난 거울이 실수인지, 계산인지, 실제로 가능한 시점인지는 지금도 의견이 갈린다. 엑스선 조사로 마네가 뒷모습의 위치를 여러 번 고쳐 그렸다는 사실은 확인됐다.',
+  steps:['정면의 여자를 본다. 좌우가 거의 대칭이고 화면 한가운데에 있다.','거울 속을 본다. 샹들리에, 객석, 뒷모습과 신사를 찾는다.','둘을 겹쳐 본다. 맞지 않는 곳이 어디인지 확인한다.']
+},
+{
+  id:'letter', no:'CASE 09', img:'img/letter.jpg', ratio:1920/2511,
+  name:'지워진 그림',
+  work:'열린 창가에서 편지를 읽는 여인', artist:'요하네스 페르메이르', year:'1657~1659년경',
+  place:'드레스덴 고전 거장 회화관 · 캔버스에 유채 · 83 × 64.5 cm',
+  hook:'조용히 편지를 읽는 여인과 텅 빈 벽. 그 벽은 원래 비어 있지 않았다.',
+  brief:'1650년대 델프트. 창가에서 한 여인이 편지를 읽는다. 뒤의 벽은 넓게 비어 있다. 이 사진은 2021년 복원 전의 모습이다. 그림을 눌러 단서 다섯 개를 찾아라.',
+  fx:[{k:'glint',x:7,y:52,w:'10%',ar:'.35'}],
+  clues:[
+    {x:60,y:28,r:10,z:2,riddle:'너무 넓게 비어 있는 곳',title:'빈 벽',
+     found:'여인 뒤의 벽이 화면의 큰 부분을 차지하는데 아무것도 없다.',
+     behind:'1979년 엑스선 촬영에서 이 벽 아래에 큐피드를 그린 커다란 그림이 발견됐다. 페르메이르가 스스로 지웠다고 믿어졌는데, 2017년 조사에서 덧칠이 그가 죽고 수십 년 뒤의 것으로 밝혀졌다. 복원가들이 덧칠을 걷어 냈고 2021년 큐피드가 돌아온 모습이 공개됐다.',
+     look:'이상하게 빈 곳이 있으면 의심해 보자. 그림은 완성된 뒤에도 남의 손으로 바뀐다.'},
+    {x:36,y:71,r:6,z:3.6,riddle:'그녀의 손에 든 것',title:'편지',
+     found:'여인은 두 손으로 편지를 펴 들고 끝까지 읽어 내려간다. 내용은 보이지 않는다.',
+     behind:'17세기 네덜란드에서 편지 읽는 여인은 인기 있는 주제였고, 대개 연애편지였다. 벽에 큐피드 그림이 있었다면 뜻이 분명해진다. 그림 속 큐피드는 가면을 밟고 있는데, 거짓 없는 사랑을 뜻하는 도상으로 읽힌다.',
+     look:'그림 속 벽에 걸린 그림을 보자. 장면의 뜻을 알려 주는 주석 구실을 한다.'},
+    {x:33,y:55,r:7,z:3.6,riddle:'창에 나타난 두 번째 얼굴',title:'유리에 비친 얼굴',
+     found:'열린 창의 유리에 여인의 얼굴이 흐릿하게 비친다.',
+     behind:'옆모습만 보이는 여인의 정면을 유리가 보여 준다. 열린 창은 바깥세상, 곧 편지를 보낸 사람이 있는 쪽으로 읽히기도 한다. 페르메이르는 평생 서른 점 남짓만 남겼고 대부분이 이런 창가의 실내다.',
+     look:'창과 유리를 살펴보자. 인물이 숨긴 표정이 거기 비칠 때가 있다.'},
+    {x:85,y:50,r:10,z:2,riddle:'그림 앞에 드리운 천',title:'초록 커튼',
+     found:'오른쪽에 초록 커튼이 화면 앞쪽으로 걸려 있다. 방 안의 커튼이 아니라 그림을 가리는 커튼처럼 그렸다.',
+     behind:'당시에는 그림을 보호하려고 앞에 진짜 커튼을 달았다. 페르메이르는 그것을 그려 넣어 눈을 속인다. 엑스선으로 보면 이 자리 아래쪽에는 원래 큰 포도주잔이 있었고, 그는 잔을 지우고 커튼으로 덮었다.',
+     look:'화면 맨 앞에 무엇이 있는지 보자. 관람자와 장면 사이의 거리를 화가가 정해 둔 것이다.'},
+    {x:47,y:85,r:8,z:2.8,riddle:'기울어진 그릇',title:'쏟아진 과일',
+     found:'구겨진 양탄자 위에 그릇이 기울어 과일이 쏟아져 있다. 복숭아 하나는 반으로 갈라졌다.',
+     behind:'고요한 방에서 이곳만 흐트러져 있다. 과일을 유혹의 상징으로 읽어 여인의 마음이 흔들린다는 뜻으로 보는 해석이 있다. 이 그림은 1742년 작센 선제후가 렘브란트의 작품으로 알고 샀다. 페르메이르의 것으로 인정받은 것은 19세기다.',
+     look:'정돈된 그림에서 흐트러진 한 곳을 찾자. 인물이 말하지 않는 감정이 거기 있다.'}
+  ],
+  q:'빈 벽에 큐피드 그림이 돌아오면, 여인이 읽는 편지는 무엇이 되는가?',
+  opts:['사업 계약서','연애편지','부고'], a:1,
+  reveal:'250년 넘게 사람들은 빈 벽 앞에서 편지를 읽는 고독한 여인을 봤다. 덧칠을 걷어 내자 벽에 사랑의 신이 나타났고, 그림은 연애편지를 읽는 장면이 됐다. 같은 그림이 덧칠 하나로 다른 이야기가 된다.',
+  open:'누가, 왜 큐피드를 덮었는지는 모른다. 취향이 바뀌어서라는 추측이 있을 뿐이다. 복원된 모습이 더 낫다는 사람과 빈 벽이 더 좋았다는 사람이 지금도 맞선다.',
+  steps:['빛을 본다. 왼쪽 창에서 들어와 여인의 이마와 편지에 닿는다.','화면을 셋으로 나눈다. 왼쪽 창, 가운데 여인, 오른쪽 커튼이다.','복원된 모습을 찾아 나란히 놓고 본다. 벽 하나로 무엇이 달라지는지 비교한다.']
+},
+{
+  id:'madamex', no:'CASE 10', img:'img/madamex.jpg', ratio:1200/2330,
+  name:'어깨끈 하나',
+  work:'마담 X', artist:'존 싱어 사전트', year:'1884',
+  place:'뉴욕 메트로폴리탄 미술관 · 캔버스에 유채 · 208.6 × 109.9 cm',
+  hook:'우아한 초상화 한 점이 화가를 파리에서 쫓아냈다. 문제는 아주 작은 곳에 있었다.',
+  brief:'1884년 파리 살롱. 스물여덟 살의 화가가 사교계의 유명한 미인을 그려 내걸었다. 전시장은 비웃음으로 뒤집혔다. 그림을 눌러 단서 다섯 개를 찾아라.',
+  fx:[{k:'glint',x:47,y:30,w:'30%',ar:'1.6'}],
+  clues:[
+    {x:58,y:28,r:6,z:3.6,riddle:'나중에 고쳐 그린 곳',title:'어깨끈',
+     found:'보석 박힌 어깨끈이 양쪽 어깨에 단정히 걸려 있다. 오른쪽 끈 둘레는 붓질이 조금 다르다.',
+     behind:'처음 전시됐을 때 이 끈은 어깨에서 흘러내려 있었다. 옷이 곧 벗겨질 듯한 모습에 살롱 관객이 격분했다. 모델의 어머니는 그림을 내려 달라고 했다. 사전트는 전시가 끝난 뒤 끈을 어깨 위로 고쳐 그렸다.',
+     look:'배경이나 살결에서 붓질이 달라지는 곳을 찾자. 화가가 고친 자리다.'},
+    {x:51,y:19,r:6,z:3.6,riddle:'살아 있는 사람 같지 않은 색',title:'푸르스름한 살결',
+     found:'피부가 창백하다 못해 푸른 기가 돈다. 귀만 붉다.',
+     behind:'모델은 비르지니 고트로, 미국 뉴올리언스 태생으로 파리의 은행가와 결혼했다. 연보랏빛 분을 바르고 귀에 연지를 칠하는 화장으로 유명했다. 사전트는 그 인공적인 색을 그대로 그렸고, 비평가들은 시체 같다고 조롱했다.',
+     look:'피부색을 보자. 초상화의 살빛에는 그 시대의 화장법과 미의 기준이 담긴다.'},
+    {x:50,y:12.7,r:5,z:4.5,riddle:'머리 위의 작은 장신구',title:'초승달',
+     found:'올린 머리 위에 다이아몬드로 된 작은 초승달이 꽂혀 있다.',
+     behind:'초승달은 사냥과 달의 여신 디아나의 표지다. 순결한 여신의 상징을 달았지만 파리 사교계에서 그녀는 염문으로 더 유명했다. 그 어긋남을 읽는 사람도 있다.',
+     look:'장신구를 보자. 신화나 종교에서 온 모양이면 인물이 어떤 역할을 자처하는지 알 수 있다.'},
+    {x:26,y:53.5,r:7,z:3.2,riddle:'탁자를 짚은 손',title:'비틀린 팔',
+     found:'오른팔이 뒤로 돌아가 탁자를 짚고 있다. 손목이 불편하게 꺾였고 몸은 정면인데 얼굴은 완전히 옆을 본다.',
+     behind:'주문받은 그림이 아니었다. 사전트가 먼저 그리게 해 달라고 청했다. 모델이 가만히 있지 못해 그는 1년 넘게 애를 먹었고 자세를 찾으려고 스케치를 서른 점쯤 남겼다. 편한 자세가 아니라 일부러 만든 긴장이다.',
+     look:'손과 팔을 보자. 얼굴이 감춘 긴장이 손에서 드러난다.'},
+    {x:80,y:96.5,r:8,z:3,riddle:'오른쪽 아래의 글씨',title:'서명과 사라진 이름',
+     found:'오른쪽 아래에 "John S. Sargent 1884"라고 서명돼 있다. 모델의 이름은 어디에도 없다.',
+     behind:'사전트는 이 그림을 30년 넘게 직접 갖고 있다가 1916년 메트로폴리탄 미술관에 팔았다. 모델의 이름을 밝히지 말아 달라고 했고, 그래서 "마담 X"가 됐다. 그는 "내가 그린 것 중 최고일 것"이라고 썼다.',
+     look:'제목이 누구의 것인지 따져 보자. 화가가 붙인 것인지, 나중에 붙은 것인지에 따라 뜻이 달라진다.'}
+  ],
+  q:'1884년 살롱을 뒤집어 놓은 것은 결국 무엇이었나?',
+  opts:['모델이 미국 출신이라는 사실','흘러내린 어깨끈 하나가 암시한 것','그림이 지나치게 컸다는 것'], a:1,
+  reveal:'끈 하나의 위치가 초상화를 추문으로 만들었다. 드러난 어깨보다 "옷이 곧 흘러내릴 것"이라는 암시가 문제였다. 사전트는 파리에서 주문이 끊겨 런던으로 옮겼고, 거기서 당대 최고의 초상화가가 됐다.',
+  open:'고트로가 이 그림을 원했는지, 싫어했는지는 기록이 엇갈린다. 추문 뒤에 그녀는 다른 화가들에게 다시 초상화를 맡겼다. 끈이 흘러내린 원래 모습은 당시 사진과 미완성 모사본으로만 남아 있다.',
+  steps:['윤곽을 본다. 검은 드레스와 흰 피부의 경계선이 그림의 뼈대다.','얼굴에서 어깨, 팔로 내려간다. 몸은 앞을 보고 얼굴은 옆을 본다.','배경을 본다. 아무것도 없는 갈색이 인물을 무대 위처럼 띄운다.']
+}];
+const RANKS=[[0,'견습 탐정'],[150,'수습 감정사'],[350,'큐레이터 탐정'],[600,'명화 수사관'],[850,'수석 감정관']];
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+let save={cases:{}};
+try{const s=JSON.parse(localStorage.getItem('ccf-save')||'null'); if(s&&s.cases) save=s;}catch(e){}
+const persist=()=>{try{localStorage.setItem('ccf-save',JSON.stringify(save))}catch(e){}};
+const xp=()=>Object.values(save.cases).reduce((a,c)=>a+(c.score||0),0);
+function rankOf(v){let r=RANKS[0],next=null;for(const x of RANKS){if(v>=x[0])r=x;else{next=x;break}}return{name:r[1],base:r[0],next}}
+function show(id){for(const s of ['home','case','verdict','stats','scene'])$('#'+s).hidden=s!==id;window.scrollTo(0,0)}
+
+/* ---------- measurement: one record per visitor, kept in this browser and, where the viewer may write, in the shared store ---------- */
+const BEACON_URL=''; // 공개 호스팅에서 수집 주소를 넣으면 같은 기록을 그곳으로도 보낸다
+let me={first:Date.now(),days:[],plays:[]};
+try{const s=JSON.parse(localStorage.getItem('ccf-log')||'null'); if(s&&Array.isArray(s.plays)) me=s;}catch(e){}
+let DB=null,UID=null,CAN_EDIT=false,syncT=0,chain=Promise.resolve(),run=null;
+const today=()=>new Date().toISOString().slice(0,10);
+function logSave(){ if(!me.days.includes(today()))me.days.push(today()); me.plays=me.plays.slice(-200); me.days=me.days.slice(-90);
+  try{localStorage.setItem('ccf-log',JSON.stringify(me))}catch(e){}
+  clearTimeout(syncT); syncT=setTimeout(sync,900)}
+function sync(){ const snap=JSON.parse(JSON.stringify(me));
+  if(BEACON_URL){try{navigator.sendBeacon(BEACON_URL,JSON.stringify(snap))}catch(e){}}
+  if(!DB||!UID)return; chain=chain.then(()=>DB.doc('runs/'+UID).set(snap)).catch(()=>{}) }
+/* public counter: on the public site build.sh adds GoatCounter (no cookies, no personal data); elsewhere this does nothing.
+   One event per step of a play: case-<id>-start, case-<id>-clue1..5, case-<id>-solve, scene-<id>. */
+function gc(path,title){try{if(window.goatcounter&&goatcounter.count)goatcounter.count({path,title:title||path,event:true})}catch(e){}}
+function track(ev,x){
+  if(ev==='start'){run={c:x,t:Date.now(),found:0,hints:0,solved:false};me.plays.push(run);gc(`case-${x}-start`)}
+  else if(!run)return;
+  else if(ev==='clue'){run.found++;gc(`case-${run.c}-clue${run.found}`)}
+  else if(ev==='hint')run.hints++;
+  else if(ev==='solve'){run.solved=true;run.score=x.score;run.sec=x.sec;gc(`case-${run.c}-solve`)}
+  logSave() }
+logSave();
+(async()=>{try{ if(!window.claude||!window.claude.use)return;
+  const [db,user]=await Promise.all([claude.use('db'),claude.use('user')]); if(!user)return;
+  CAN_EDIT=!!(await user.canEdit()); UID=await user.id(); DB=db; if(DB&&UID)sync();
+  if(!$('#home').hidden)home(); }catch(e){}})();
+
+function summarize(rows){
+  const plays=rows.flatMap(r=>r.plays||[]), med=a=>{if(!a.length)return null;const b=[...a].sort((p,q)=>p-q);return b[Math.floor(b.length/2)]};
+  const per=CASES.map(c=>{const ps=plays.filter(p=>p.c===c.id),sv=ps.filter(p=>p.solved);
+    return {c,starts:ps.length,reach:[1,2,3,4,5].map(n=>ps.filter(p=>p.found>=n).length),solved:sv.length,sec:med(sv.map(p=>p.sec||0)),hints:ps.length?ps.reduce((a,p)=>a+(p.hints||0),0)/ps.length:0}});
+  return {visitors:rows.length,back:rows.filter(r=>(r.days||[]).length>=2).length,starts:plays.length,solved:plays.filter(p=>p.solved).length,
+    multi:rows.filter(r=>new Set((r.plays||[]).filter(p=>p.solved).map(p=>p.c)).size>=3).length,per}}
+async function stats(){
+  stopPlay();show('stats');const el=$('#stats');
+  const head=`<div class="topbar"><button class="ghost" id="sback">← 목록</button><h2><span class="mono">Measurement</span><br>측정</h2></div>`;
+  el.innerHTML=head+`<p class="note">불러오는 중…</p>`;$('#sback').onclick=home;
+  let rows=[me],src='이 브라우저에 쌓인 기록만 보여 준다.';
+  if(DB&&CAN_EDIT){try{
+    const q=await Promise.race([DB.collection('runs').limit(1000).get(),new Promise((_,no)=>setTimeout(()=>no(new Error('timeout')),10000))]);
+    const d=q.docs.map(x=>x.data()).filter(x=>x&&Array.isArray(x.plays));
+    if(d.length){rows=d;src=`기록을 남길 수 있는 방문자 ${d.length}명의 합계다. 보기 전용으로 들어온 사람과 로그인하지 않은 사람은 기록되지 않는다.`}
+  }catch(e){src='공유 기록을 불러오지 못해 이 브라우저의 기록만 보여 준다.'}}
+  if($('#stats').hidden)return;
+  const s=summarize(rows),pc=(a,b)=>b?Math.round(a/b*100)+'%':'–';
+  el.innerHTML=head+`<p class="note">${src}</p>
+  <div class="tiles">
+    <div><span class="mono">방문자</span><b>${s.visitors}</b></div>
+    <div><span class="mono">2일 이상 다시 온 사람</span><b>${pc(s.back,s.visitors)}</b></div>
+    <div><span class="mono">사건 시작</span><b>${s.starts}</b></div>
+    <div><span class="mono">시작 대비 해결</span><b>${pc(s.solved,s.starts)}</b></div>
+    <div><span class="mono">3건 이상 해결한 사람</span><b>${pc(s.multi,s.visitors)}</b></div>
+  </div>
+  <div class="sec-head"><h2>사건별 이탈 지점</h2><span class="mono">시작한 플레이 가운데 각 단계까지 간 비율</span></div>
+  <div class="tablewrap"><table><thead><tr><th>사건</th><th>시작</th><th>단서 1</th><th>단서 2</th><th>단서 3</th><th>단서 4</th><th>단서 5</th><th>해결</th><th>해결 시간(중앙값)</th><th>평균 힌트</th></tr></thead>
+  <tbody>${s.per.map(p=>`<tr><td>${esc(p.c.no.replace('CASE ',''))} ${esc(p.c.work)}</td><td>${p.starts}</td>${p.reach.map(n=>`<td>${pc(n,p.starts)}</td>`).join('')}<td>${pc(p.solved,p.starts)}</td><td>${p.sec==null?'–':Math.floor(p.sec/60)+'분 '+(p.sec%60)+'초'}</td><td>${p.starts?p.hints.toFixed(1):'–'}</td></tr>`).join('')}</tbody></table></div>`;
+  $('#sback').onclick=home;
+}
+
+/* ---------- one-scene hunts: a portrait frame built to be played once or screen-recorded ---------- */
+const SCENES=[
+ {id:'skull',case:'ambassadors',x:46.5,y:88,r:13,q:'이 그림 바닥에 이상한 것이 하나 있습니다.',sub:'찾아서 눌러 보세요.',
+  steps:[{z:1.6,t:'정면에서 보면 길쭉한 얼룩입니다.',d:2600},{z:4.4,extra:'scaleX(.2) rotate(24deg)',t:'그림 오른쪽 끝에 서서 비스듬히 보면,',d:3400},{t:'해골입니다.',d:2400},{t:'1533년 화가 홀바인이 숨긴 한마디. 죽음을 기억하라.',d:3400}]},
+ {id:'shadow',case:'nightwatch',x:54.5,y:67.5,r:12,q:'이 그림의 제목은 〈야경〉입니다.',sub:'그런데 밤이 아니라는 증거가 그림 안에 있습니다. 찾아보세요.',
+  steps:[{z:3,t:'대장이 앞으로 내민 손.',d:2400},{t:'그 그림자가 옆 사람의 옷에 또렷이 떨어져 있습니다.',d:3200},{t:'강한 빛이 왼쪽 위에서 들어오고 있다는 뜻입니다.',d:3200},{t:'이 장면은 밤이 아닙니다. 표면의 바니시가 검게 변해서 밤 그림으로 알려졌습니다.',d:3800}]},
+ {id:'note',case:'scream',x:27.5,y:14.7,r:13,q:'이 그림 어딘가에 연필로 쓴 낙서가 숨어 있습니다.',sub:'어디일까요?',
+  steps:[{z:3.4,t:'왼쪽 위 붉은 하늘에 아주 작은 연필 글씨가 있습니다.',d:2800},{inset:'img/scream_note.jpg',t:'"미친 사람만이 그릴 수 있다."',d:3400},{t:'오랫동안 화난 관람객의 낙서로 여겨졌습니다.',d:3000},{t:'2021년 미술관은 뭉크 자신의 글씨라고 발표했습니다.',d:3600}]}
+];
+let S=null;
+function sceneStop(){if(S)S.timers.forEach(clearTimeout);S=null}
+function later(fn,ms){if(!S)return;const me=S;me.timers.push(setTimeout(()=>{if(S===me)fn()},ms))}
+function scene(id,auto){
+  stopPlay();
+  const sc=SCENES.find(x=>x.id===id),c=CASES.find(x=>x.id===sc.case),i=SCENES.indexOf(sc),nx=SCENES[(i+1)%SCENES.length];
+  S={sc,c,timers:[],state:'ask',misses:0,z:1,extra:''};if(!auto)gc(`scene-${id}`);
+  $('#scene').innerHTML=`
+  <div class="topbar"><button class="ghost" id="qback">← 목록</button><h2><span class="mono">한 장면 찾기 ${i+1} / ${SCENES.length}</span><br>${esc(c.work)}</h2></div>
+  <div class="scene-wrap"><div class="phone">
+    <div class="ph-q"><span class="mono">명화 사건파일</span><div id="phq">${esc(sc.q)}</div><div class="ph-sub" id="phsub">${esc(sc.sub)}</div></div>
+    <div class="ph-stage" id="phstage"><div class="ph-pic" id="phpic" style="--ratio:${c.ratio}">
+        <div class="ph-zoom" id="phzoom" style="transform-origin:${sc.x}% ${sc.y}%"><img src="${c.img}" alt="${esc(c.work)}" draggable="false"></div></div>
+      <span class="ph-count" id="phcount"></span><div class="flash" id="phflash"></div>
+      <div class="ph-inset" id="phinset"></div></div>
+    <div class="ph-cap" id="phcap" aria-live="polite"></div>
+  </div></div>
+  <div class="row center"><button class="ghost" id="qagain">처음부터</button><button class="ghost" id="qauto">자동 재생 (녹화용)</button>
+    <button class="ghost" id="qfull">이 사건 전체 풀기</button><button class="btn" id="qnext">다음 장면</button></div>
+  <p class="note center">자동 재생은 화면 녹화용이다. 질문, 5초 세기, 공개 순서로 혼자 진행된다.</p>`;
+  $('#qback').onclick=home;$('#qagain').onclick=()=>scene(id);$('#qauto').onclick=()=>scene(id,true);
+  $('#qfull').onclick=()=>play(c.id);$('#qnext').onclick=()=>scene(nx.id);
+  $('#phstage').addEventListener('click',sceneTap);
+  show('scene');
+  if(auto){S.state='auto';let n=5;const tickDown=()=>{if(n===0){$('#phcount').textContent='';sceneRing();later(sceneReveal,1300);return}
+      $('#phcount').textContent=n;n--;later(tickDown,1000)};later(tickDown,2600)}
+}
+function sceneRing(stay){const k=S.sc,r=document.createElement('i');r.className=stay?'ring stay':'ring';r.style.cssText=`left:${k.x}%;top:${k.y}%;width:${k.r*1.8}%;aspect-ratio:1`;$('#phzoom').appendChild(r);if(!stay)setTimeout(()=>r.remove(),3400)}
+function sceneTap(e){
+  if(!S||S.state!=='ask')return;
+  const k=S.sc,r=$('#phpic').getBoundingClientRect(),x=(e.clientX-r.left)/r.width*100,y=(e.clientY-r.top)/r.height*100;
+  if(Math.hypot(x-k.x,(y-k.y)*r.height/r.width)<=k.r)return sceneReveal();
+  S.misses++;const st=$('#phstage'),sr=st.getBoundingClientRect(),m=document.createElement('i');m.className='miss';
+  m.style.left=(e.clientX-sr.left)+'px';m.style.top=(e.clientY-sr.top)+'px';st.appendChild(m);setTimeout(()=>m.remove(),520);
+  if(S.misses===3){$('#phsub').textContent='힌트: 금빛 원 안을 보세요.';sceneRing(true)}
+}
+function sceneReveal(){
+  S.state='reveal';$('#phsub').textContent='';$('#phzoom').querySelectorAll('.ring').forEach(x=>x.remove());
+  const f=$('#phflash');f.classList.remove('go');void f.offsetWidth;f.classList.add('go');
+  const k=S.sc,cap=$('#phcap');let i=0;
+  const step=()=>{const st=k.steps[i];if(!st){S.state='done';$('#phq').textContent='나머지 단서 4개는 명화 사건파일에서.';return}
+    if(st.z)S.z=st.z; if(st.extra)S.extra=st.extra;
+    $('#phzoom').style.transform=`translate(${50-k.x}%,${50-k.y}%) scale(${S.z}) ${S.extra}`;
+    if(st.inset){const n=$('#phinset');n.innerHTML=`<img src="${st.inset}" alt=""><span class="mono">대비를 높인 확대</span>`;n.classList.add('on')}
+    const prev=cap.querySelector('p.on');cap.querySelectorAll('p.old').forEach(x=>x.remove());if(prev)prev.className='old';
+    const p=document.createElement('p');p.textContent=st.t;cap.appendChild(p);requestAnimationFrame(()=>requestAnimationFrame(()=>p.classList.add('on')));
+    i++;later(step,st.d)};
+  later(step,350);
+}
+
+/* ---------- home ---------- */
+function home(){
+  stopPlay();
+  const v=xp(),rk=rankOf(v),solved=CASES.filter(c=>save.cases[c.id]);
+  const pct=rk.next?Math.round((v-rk.base)/(rk.next[0]-rk.base)*100):100;
+  $('#home').innerHTML=`
+  <header class="masthead">
+    <div><div class="mono">Canvas Case Files</div><h1>명화 사건파일</h1>
+      <p>명화에는 화가가 숨겨 둔 단서가 있다. 그림을 눌러 단서를 찾고, 이야기를 맞추고, 사건을 닫아라.</p></div>
+    <div class="badge"><span class="mono">수사관 등급</span><b>${rk.name}</b>
+      <div class="xpbar"><i style="width:${pct}%"></i></div>
+      <span class="mono">${v}점${rk.next?` · 다음 등급 ${rk.next[1]}까지 ${rk.next[0]-v}점`:' · 최고 등급'}</span></div>
+  </header>
+  <div class="sec-head"><h2>한 장면 찾기</h2><span class="mono">그림 하나에서 하나만 찾는다 · 1분</span></div>
+  <div class="quick">${SCENES.map(q=>{const qc=CASES.find(x=>x.id===q.case);return `
+    <button class="qtile" data-scene="${q.id}"><div class="thumb"><img src="${qc.img}" alt="${esc(qc.work)}"></div>
+      <div class="body"><b>${esc(q.q)}</b><span class="mono">${esc(qc.work)}</span></div></button>`}).join('')}</div>
+  <div class="sec-head"><h2>사건 목록</h2><span class="mono">해결 ${solved.length} / ${CASES.length}</span></div>
+  <div class="cases">${CASES.map(c=>{const s=save.cases[c.id];return `
+    <button class="case ${s?'solved':''}" data-open="${c.id}">
+      <div class="thumb"><img src="${c.img}" alt="${esc(c.work)}">${s?`<span class="stamp">해결 ${s.rank}</span>`:''}</div>
+      <div class="body"><span class="mono">${c.no}</span><h3>${esc(c.name)}</h3><p class="hook">${esc(c.hook)}</p>
+        <div class="meta"><span class="mono">${s?esc(c.artist+' · '+c.year):'단서 5개'}</span><span class="status ${s?'done':''}">${s?'다시 수사':'미해결'}</span></div></div>
+    </button>`}).join('')}</div>
+  <div class="sec-head"><h2>도감</h2><span class="mono">수집 ${solved.length} / ${CASES.length}</span></div>
+  <div class="shelf">${CASES.map(c=>{const s=save.cases[c.id];return s?`
+    <button class="card" data-review="${c.id}"><img src="${c.img}" alt=""><span class="rk">${s.rank}</span><b>${esc(c.work)}</b><span>${esc(c.artist)} · ${c.year}</span></button>`:`
+    <div class="card locked"><b>?</b><span class="mono">${c.no}<br>사건을 해결하면 수집</span></div>`}).join('')}
+</div>
+  <p class="note">수집한 카드를 누르면 사건 보고서와 감상법을 다시 볼 수 있다. 그림 이미지는 퍼블릭 도메인이며 위키미디어 공용에서 가져왔다.</p>
+  <div class="row"><button class="ghost" id="tostats">측정 보기</button><span class="note">${CAN_EDIT&&DB?'기록을 남길 수 있는 방문자 전체의 합계를 본다.':'이 브라우저에 쌓인 플레이 기록을 본다.'}</span></div>`;
+  $('#tostats').onclick=stats;
+  show('home');
+}
+$('#home').addEventListener('click',e=>{
+  const q=e.target.closest('[data-scene]'); if(q) return scene(q.dataset.scene);
+  const o=e.target.closest('[data-open]'); if(o) return play(o.dataset.open);
+  const r=e.target.closest('[data-review]'); if(r) return verdict(CASES.find(c=>c.id===r.dataset.review),null);
+});
+
+/* ---------- case ---------- */
+let P=null, raf=0, tick=0;
+function stopPlay(){cancelAnimationFrame(raf);clearInterval(tick);P=null;sceneStop()}
+function play(id){
+  stopPlay();
+  const c=CASES.find(x=>x.id===id);
+  P={c,found:[],hints:0,misses:0,wrong:0,t0:Date.now(),open:-1,mode:'list'};track('start',c.id);
+  $('#case').innerHTML=`
+  <div class="topbar"><button class="ghost" id="back">← 목록</button>
+    <h2><span class="mono">${c.no}</span><br>${esc(c.name)}</h2>
+    <span class="counter" id="count"></span><span class="counter" id="clock">00:00</span></div>
+  <div class="grid">
+    <div class="hang"><div class="stage" id="stage" style="--ratio:${c.ratio}">
+      <div class="tilt" id="tilt"><div class="zoom" id="zoom"><div class="breathe">
+        <img src="${c.img}" alt="${esc(c.work)}" id="pic" draggable="false">
+        ${c.fx.map(f=>`<i class="fx ${f.k}" style="left:${f.x}%;top:${f.y}%;${f.w?`--w:${f.w};`:''}${f.ar?`--ar:${f.ar};`:''}${f.rot?`--rot:${f.rot};`:''}"></i>`).join('')}
+        <div id="pins"></div>
+      </div></div></div>
+      <canvas class="motes" id="motes"></canvas><div class="flash" id="flash"></div>
+    </div></div>
+    <aside class="dossier" id="dossier" aria-live="polite"></aside>
+  </div>`;
+  $('#back').onclick=home;
+  $('#stage').addEventListener('click',onTap);
+  $('#stage').addEventListener('pointermove',onTilt);
+  $('#stage').addEventListener('pointerleave',()=>{$('#tilt').style.transform=''});
+  tick=setInterval(clock,500); clock(); motes(); panel(); pins();
+  if(/debug/.test(location.hash)) $('#pins').innerHTML+=c.clues.map(k=>`<i class="ring" style="left:${k.x}%;top:${k.y}%;width:${k.r*2}%;aspect-ratio:1;animation:none"></i>`).join('');
+  show('case');
+}
+function clock(){if(!P)return;const s=Math.floor((Date.now()-P.t0)/1000);$('#clock').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  $('#count').textContent=`단서 ${P.found.length}/${P.c.clues.length}`}
+function onTilt(e){if(e.pointerType!=='mouse'||P.open>=0)return;const r=e.currentTarget.getBoundingClientRect();
+  const dx=(e.clientX-r.left)/r.width-.5,dy=(e.clientY-r.top)/r.height-.5;
+  $('#tilt').style.transform=`rotateY(${dx*2.4}deg) rotateX(${-dy*2.4}deg)`}
+function zoomTo(k){const z=$('#zoom'),st=$('#stage');
+  if(!k){z.style.transform='';z.style.setProperty('--z',1);st.classList.remove('zoomed');return}
+  const cl=(v,lo)=>Math.min(0,Math.max(lo,v)),s=k.z;
+  z.style.transform=`translate(${cl(50-k.x*s,100-100*s)}%,${cl(50-k.y*s,100-100*s)}%) scale(${s})`;
+  z.style.setProperty('--z',s);st.classList.add('zoomed');$('#tilt').style.transform=''}
+function onTap(e){
+  if(!P)return; const pin=e.target.closest('.pin'); if(pin) return openClue(+pin.dataset.i);
+  if(P.open>=0) return closeClue();
+  if(P.mode==='final') return;
+  const r=$('#pic').getBoundingClientRect(), x=(e.clientX-r.left)/r.width*100, y=(e.clientY-r.top)/r.height*100, ar=r.height/r.width;
+  let hit=-1,best=1e9;
+  P.c.clues.forEach((k,i)=>{if(P.found.includes(i))return;const d=Math.hypot(x-k.x,(y-k.y)*ar);if(d<=k.r&&d<best){best=d;hit=i}});
+  if(hit<0){P.misses++;const m=document.createElement('i');m.className='miss';const sr=$('#stage').getBoundingClientRect();
+    m.style.left=(e.clientX-sr.left)+'px';m.style.top=(e.clientY-sr.top)+'px';$('#stage').appendChild(m);setTimeout(()=>m.remove(),520);return}
+  P.found.push(hit);track('clue');const f=$('#flash');f.classList.remove('go');void f.offsetWidth;f.classList.add('go');
+  pins();clock();openClue(hit);
+}
+function pins(){$('#pins').innerHTML=P.found.map((i,n)=>{const k=P.c.clues[i];return `<button class="pin" data-i="${i}" style="left:${k.x}%;top:${k.y}%" aria-label="${esc(k.title)} 다시 보기">${n+1}</button>`}).join('')}
+function openClue(i){P.open=i;zoomTo(P.c.clues[i]);panel();if(innerWidth<=880)$('#dossier').scrollIntoView({behavior:'smooth',block:'nearest'})}
+function closeClue(){P.open=-1;zoomTo(null);if(P.found.length===P.c.clues.length)P.mode='final';panel()}
+function hint(){const i=P.c.clues.findIndex((_,n)=>!P.found.includes(n));if(i<0)return;P.hints++;track('hint');const k=P.c.clues[i];
+  const r=document.createElement('i');r.className='ring';r.style.cssText=`left:${k.x}%;top:${k.y}%;width:${k.r*2.4}%;aspect-ratio:1`;
+  $('#pins').appendChild(r);setTimeout(()=>r.remove(),3400);
+  if(innerWidth<=880)$('#stage').scrollIntoView({behavior:'smooth',block:'center'})}
+function panel(){
+  const c=P.c,d=$('#dossier');
+  if(P.open>=0){const k=c.clues[P.open],n=P.found.indexOf(P.open)+1,all=P.found.length===c.clues.length;
+    d.innerHTML=`<span class="tag">단서 ${n} / ${c.clues.length}</span><h3>${esc(k.title)}</h3>
+      <div class="entry"><span class="mono">발견</span><p>${esc(k.found)}</p></div>
+      ${k.widget==='skull'?`<div class="viewer skull"><img src="${c.img}" alt="" id="sk"></div>
+        <label class="slide" for="skr">정면<input type="range" id="skr" min="0" max="100" value="0">비스듬히</label>`:''}
+      ${k.widget==='mirror'?`<div class="viewer mirror"><img src="${c.img}" alt="" id="mr"></div>
+        <label class="slide" for="mrr">어둡게<input type="range" id="mrr" min="0" max="100" value="0">거울 닦기</label>`:''}
+      ${k.widget==='note'?`<div class="viewer note"><img src="img/scream_note.jpg" alt="하늘 부분 확대"></div><p class="note">글씨가 보이도록 대비를 높인 확대 사진이다.</p>`:''}
+      <div class="entry"><span class="mono">비하인드</span><p>${esc(k.behind)}</p></div>
+      <div class="entry look"><span class="mono">그림 보는 법</span><p>${esc(k.look)}</p></div>
+      <div class="row"><button class="btn" id="go">${all&&P.mode!=='final'?'마지막 추리로':'수사 계속'}</button></div>`;
+    $('#go').onclick=closeClue;
+    const sk=$('#skr');if(sk){const f=()=>{const t=sk.value/100,s=1-t*.82,z=1+t*2.1;$('#sk').style.transform=`scale(${z}) scaleX(${s}) rotate(${24*Math.min(1,t*1.4)}deg)`};sk.oninput=f;f()}
+    const mr=$('#mrr');if(mr){const f=()=>{const t=mr.value/100;$('#mr').style.filter=`brightness(${1+t*1.5}) contrast(${1+t*.35})`};mr.oninput=f;f()}
+    return}
+  if(P.mode==='final'){
+    d.innerHTML=`<span class="tag">마지막 추리</span><h3>${esc(c.q)}</h3>
+      <div class="opts">${c.opts.map((o,i)=>`<button class="opt" data-o="${i}">${esc(o)}</button>`).join('')}</div>
+      <p class="note">단서를 다시 보려면 그림 위의 번호를 누른다.</p>`;
+    d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(+b.dataset.o===c.a)return finish();P.wrong++;b.classList.add('no');b.disabled=true});
+    return}
+  d.innerHTML=`<span class="tag">사건 개요</span><h3>${esc(c.name)}</h3><p class="brief">${esc(c.brief)}</p>
+    <ul class="clues">${c.clues.map((k,i)=>{const g=P.found.includes(i);return `<li class="${g?'got':''}" ${g?`data-i="${i}" tabindex="0"`:''}><span class="n">${g?'✓':'0'+(i+1)}</span><span>${esc(g?k.title:k.riddle)}</span></li>`}).join('')}</ul>
+    <div class="row"><button class="ghost" id="hint">힌트 보기</button><span class="note">힌트를 쓰면 등급이 내려간다 · 사용 ${P.hints}회</span></div>`;
+  $('#hint').onclick=()=>{hint();panel()};
+  d.querySelectorAll('li.got').forEach(l=>{l.onclick=()=>openClue(+l.dataset.i);l.onkeydown=e=>{if(e.key==='Enter')openClue(+l.dataset.i)}});
+}
+function score(p){const sec=(Date.now()-p.t0)/1000;
+  return Math.max(20,Math.round(100-p.hints*12-Math.max(0,p.misses-4)*2-p.wrong*10-Math.min(20,Math.max(0,sec-240)/15)))}
+function finish(){const p=P,c=p.c,sc=score(p),rank=sc>=85?'S':sc>=65?'A':'B',prev=save.cases[c.id];
+  const res={score:sc,rank,hints:p.hints,sec:Math.round((Date.now()-p.t0)/1000),first:!prev};
+  if(!prev||sc>prev.score)save.cases[c.id]={score:sc,rank};persist();track('solve',res);verdict(c,res)}
+
+/* ---------- verdict ---------- */
+function verdict(c,res){
+  stopPlay();const s=save.cases[c.id],i=CASES.indexOf(c),nx=CASES.find((x,n)=>n>i&&!save.cases[x.id])||CASES.find(x=>!save.cases[x.id]);
+  $('#verdict').innerHTML=`
+  <div class="topbar"><button class="ghost" id="vback">← 목록</button><h2><span class="mono">${c.no} · 사건 보고서</span><br>${esc(c.name)}</h2></div>
+  <div class="verdict">
+    <div class="plate"><div class="seal"><div><span>${s.rank}</span><em>해결</em></div></div><img src="${c.img}" alt="${esc(c.work)}">
+      <b>${esc(c.work)}</b><small>${esc(c.artist)} · ${c.year}</small><small>${esc(c.place)}</small></div>
+    <div class="report">
+      <h2>${res?'사건 해결':'사건 보고서'}</h2>
+      ${res?`<div class="scoreline"><span>점수 <b>${res.score}</b></span><span>시간 <b>${Math.floor(res.sec/60)}분 ${res.sec%60}초</b></span><span>힌트 <b>${res.hints}회</b></span><span>${res.first?'도감에 <b>새 카드</b> 등록':`최고 기록 <b>${s.score}</b>`}</span></div>`:''}
+      <div class="entry"><span class="mono">사건의 전말</span><p>${esc(c.reveal)}</p></div>
+      <div class="entry"><span class="mono">아직 풀리지 않은 것</span><p>${esc(c.open)}</p></div>
+      <div class="entry look"><span class="mono">이 그림 보는 순서</span><ol>${c.steps.map(t=>`<li>${esc(t)}</li>`).join('')}</ol></div>
+      <div class="entry"><span class="mono">찾은 단서</span><p>${c.clues.map(k=>esc(k.title)).join(' · ')}</p></div>
+      <div class="row">${nx?`<button class="btn" id="next">다음 사건: ${esc(nx.name)}</button>`:''}<button class="ghost" id="again">다시 수사</button></div>
+    </div>
+  </div>`;
+  $('#vback').onclick=home;$('#again').onclick=()=>play(c.id);if(nx)$('#next').onclick=()=>play(nx.id);
+  show('verdict');
+}
+
+/* ---------- drifting dust in the gallery light ---------- */
+function motes(){
+  const cv=$('#motes');if(!cv||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  const g=cv.getContext('2d');let w=0,h=0;
+  const ps=Array.from({length:46},()=>({x:Math.random(),y:Math.random(),r:.5+Math.random()*1.5,v:.00018+Math.random()*.0005,p:Math.random()*6.28,a:.12+Math.random()*.32}));
+  (function loop(t){
+    if(!cv.isConnected)return;
+    const r=cv.getBoundingClientRect();if(r.width!==w||r.height!==h){w=cv.width=r.width;h=cv.height=r.height}
+    g.clearRect(0,0,w,h);
+    for(const p of ps){p.y-=p.v;p.x+=Math.sin(t/2600+p.p)*.00022;if(p.y<-.02){p.y=1.02;p.x=Math.random()}
+      g.globalAlpha=p.a*(.6+.4*Math.sin(t/1300+p.p));g.fillStyle='#ffe9bd';g.beginPath();g.arc(p.x*w,p.y*h,p.r,0,6.28);g.fill()}
+    raf=requestAnimationFrame(loop)})(0);
+}
+/* deep links for shorts descriptions: #scene=note opens a one-scene hunt, #case=scream opens a case */
+(()=>{const h=new URLSearchParams(location.hash.slice(1)),sc=h.get('scene'),cs=h.get('case');
+  if(sc&&SCENES.some(x=>x.id===sc))scene(sc);else if(cs&&CASES.some(x=>x.id===cs))play(cs);else home()})();
+</script>
+</body>
+</html>
