@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="canonical" href="https://blessingway1.github.io/myeonghwa-game/">
 <script data-goatcounter="https://myeonghwa.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body style="margin:0">
@@ -599,7 +600,12 @@ function sync(){ const snap=JSON.parse(JSON.stringify(me));
   if(!DB||!UID)return; chain=chain.then(()=>DB.doc('runs/'+UID).set(snap)).catch(()=>{}) }
 /* public counter: on the public site build.sh adds GoatCounter (no cookies, no personal data); elsewhere this does nothing.
    One event per step of a play: case-<id>-start, case-<id>-clue1..5, case-<id>-solve, scene-<id>. */
-function gc(path,title){try{if(window.goatcounter&&goatcounter.count)goatcounter.count({path,title:title||path,event:true})}catch(e){}}
+/* events fired before count.js has loaded (a deep link opens a scene at once) wait in GCQ for up to 15 s */
+const GCQ=[];let gcT=0;
+function gcFlush(){if(!(window.goatcounter&&goatcounter.count))return false;
+  while(GCQ.length){const p=GCQ.shift();try{goatcounter.count({path:p,title:p,event:true})}catch(e){}}return true}
+function gc(path){GCQ.push(path);if(gcFlush()||gcT)return;let n=0;
+  gcT=setInterval(()=>{if(gcFlush()||++n>=30){clearInterval(gcT);gcT=0}},500)}
 function track(ev,x){
   if(ev==='start'){run={c:x,t:Date.now(),found:0,hints:0,solved:false};me.plays.push(run);gc(`case-${x}-start`)}
   else if(!run)return;
