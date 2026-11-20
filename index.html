@@ -53,7 +53,8 @@ h1,h2,h3{font-family:var(--display);font-weight:700;margin:0;text-wrap:balance;l
 .case h3{font-size:20px}
 .case .hook{color:var(--ink-dim);font-size:14px;margin:0}
 .case .meta{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:6px}
-.status{font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:3px 8px;border:1px solid var(--line);color:var(--ink-dim)}
+.case .meta .nw{white-space:nowrap}
+.status{flex-shrink:0;white-space:nowrap;font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:3px 8px;border:1px solid var(--line);color:var(--ink-dim)}
 .status.done{border-color:var(--seal);color:var(--seal)}
 .stamp{position:absolute;right:10px;top:10px;font-family:var(--display);font-weight:700;color:var(--seal);border:2px solid var(--seal);padding:2px 10px;transform:rotate(8deg);background:rgba(25,19,25,.78);font-size:15px}
 .shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:14px}
@@ -102,6 +103,10 @@ h1,h2,h3{font-family:var(--display);font-weight:700;margin:0;text-wrap:balance;l
 .dossier{background:var(--panel);border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
 .dossier h3{font-size:21px}
 .brief{margin:0;color:var(--ink-dim)}
+.label{display:flex;flex-direction:column;gap:2px;padding:8px 0 8px 12px;border-left:2px solid var(--gilt-deep)}
+.label b{font-family:var(--display);font-size:16px;color:var(--ink)}
+.label span{font-size:13px;color:var(--ink-dim)}
+.label small{font-size:12px;color:var(--ink-dim);opacity:.8}
 .clues{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .clues li{display:flex;gap:12px;align-items:baseline;padding:9px 12px;border:1px solid var(--line);color:var(--ink-dim)}
 .clues li .n{font-family:var(--mono);font-size:12px;color:var(--gilt-deep)}
@@ -574,6 +579,114 @@ const CASES = [
   reveal:'끈 하나의 위치가 초상화를 추문으로 만들었다. 드러난 어깨보다 "옷이 곧 흘러내릴 것"이라는 암시가 문제였다. 사전트는 파리에서 주문이 끊겨 런던으로 옮겼고, 거기서 당대 최고의 초상화가가 됐다.',
   open:'고트로가 이 그림을 원했는지, 싫어했는지는 기록이 엇갈린다. 추문 뒤에 그녀는 다른 화가들에게 다시 초상화를 맡겼다. 끈이 흘러내린 원래 모습은 당시 사진과 미완성 모사본으로만 남아 있다.',
   steps:['윤곽을 본다. 검은 드레스와 흰 피부의 경계선이 그림의 뼈대다.','얼굴에서 어깨, 팔로 내려간다. 몸은 앞을 보고 얼굴은 옆을 본다.','배경을 본다. 아무것도 없는 갈색이 인물을 무대 위처럼 띄운다.']
+},
+{
+  id:'seodang', no:'CASE 11', img:'img/seodang.jpg', ratio:1614/1848,
+  name:'혼자만 울고 있는 아이',
+  work:'서당', artist:'김홍도', year:'조선 후기',
+  place:'《단원 풍속도첩》 · 국립중앙박물관 · 종이 · 26.9 × 22.2 cm · 보물 · 이미지 출처: 국립중앙박물관(공공누리 제1유형)',
+  hook:'훈장 앞에서 한 아이가 등을 돌리고 운다. 둘러앉은 친구들은 웃음을 참는다.',
+  brief:'조선 후기 어느 서당. 훈장 한 사람과 학동 아홉 명이 한 방에 모였다. 그런데 한 아이만 울고 있다. 그림을 눌러 단서 다섯 개를 찾아라.',
+  fx:[],
+  clues:[
+    {x:35,y:46,r:8,z:2.6,riddle:'혼자만 다른 얼굴',title:'우는 아이',
+     found:'얼굴이 보이는 학동 가운데 우는 아이는 이 아이 하나다. 한 손은 눈가에, 다른 손은 발목 쪽에 가 있다. 훈장의 책상 바로 앞에서 훈장을 등지고 쪼그려 앉았다.',
+     behind:'국립중앙박물관은 이 아이를 "쪼그리고 돌아앉아 훌쩍이는 학동"이라 부르고 화면의 초점에 두었다고 설명한다. 국가기록원은 회초리로 종아리를 맞은 것으로 짐작되는 학생이라고 쓴다. 박물관 설명에는 맞았다는 말이 없다.',
+     look:'여러 사람이 나오는 그림에서는 모두의 시선이 모이는 곳을 찾자. 김홍도는 훈장을 축으로 학동들을 둥글게 앉혔고, 그 고리 안쪽에 이 아이가 있다.'},
+    {x:49,y:48,r:6,z:3.2,riddle:'등 뒤에 놓인 것',title:'펼쳐진 책',
+     found:'우는 아이 뒤, 훈장 책상 옆 바닥에 책이 펼쳐져 있다. 아이는 이 책을 등지고 앉았다.',
+     behind:'서당에서는 그날 배운 글을 보통 100번씩 소리 내어 읽었고, 읽은 횟수는 서산이라는 도구로 셌다. 이튿날에는 책을 보지 않고 외워 보이는 배송을 해야 다음 글로 넘어갈 수 있었다. 못 하면 될 때까지 다시 했다. 그래서 학생마다 진도가 달랐다.',
+     look:'사람이 무엇을 보고 있는지만큼 무엇을 등지고 있는지도 보자. 물건이 놓인 자리와 몸의 방향을 함께 읽으면 장면의 사정이 보인다.'},
+    {x:26,y:28,r:6,z:3.4,riddle:'턱을 괸 친구',title:'웃음을 참는 얼굴들',
+     found:'왼쪽 위 학동은 턱에 손을 괴고 우는 아이 쪽을 내려다보며 웃는다. 이 아이를 포함해 얼굴이 보이는 학동 일곱 명이 모두 웃거나 웃음을 참는 얼굴이다.',
+     behind:'박물관은 우는 학동의 서러운 표정과 함께 "주변 인물들의 익살스러운 모습"이 보는 이를 절로 미소 짓게 한다고 설명한다. 아래쪽에 등을 보이고 앉은 작은 아이는 표정이 보이지 않는다. 그래서 "모두 웃는다"가 아니라 "얼굴이 보이는 일곱 명"이라고 세어야 정확하다.',
+     look:'인물이 많은 그림은 얼굴을 하나씩 세어 보자. 한눈에 받은 인상과 실제로 센 숫자가 다를 때가 많다.'},
+    {x:65,y:20,r:8,z:2.8,riddle:'책상 너머의 어른',title:'방건을 쓴 훈장',
+     found:'책상 너머에 네모난 두건인 방건을 쓰고 유생 옷차림을 한 훈장이 앉아 있다. 방 안에서 가장 크게 그려진 사람이다.',
+     behind:'훈장이 되는 데는 특별한 자격이 필요하지 않았고 학식도 사람마다 달랐다. 다만 1659년 효종 때 정한 규정은 고을의 공론으로 훈장을 뽑게 했고, 뛰어난 훈장은 동몽교관이라는 벼슬에 올리게 했다. 마을의 지식인으로 존경받기도 했다. 훈장의 표정은 자료마다 다르게 읽는다. 한국민족문화대백과는 "난처한 표정의 훈장"이라 쓰고, 국가기록원은 훈장에게도 웃음기가 있다고 본다.',
+     look:'같은 방 안에서 누가 가장 크게, 누가 가장 작게 그려졌는지 비교해 보자. 크기의 차이도 화가가 고른 것이다.'},
+    {x:85.5,y:47,r:6.5,z:3.4,riddle:'혼자만 다른 머리',title:'갓 쓴 학동',
+     found:'오른쪽 맨 위 학동만 갓을 썼다. 다른 학동들은 머리를 땋아 내렸다.',
+     behind:'서당에는 보통 일곱여덟 살에 들어가 열대여섯 살에 마쳤고, 스무 살이 넘은 학생도 많았다. 큰 서당에서는 나이와 지식이 많은 학생을 접장으로 세워 어린 학생을 가르치게 했다. 하지만 이 갓 쓴 학동이 몇 살인지, 접장인지는 그림도 지금까지 확인한 자료도 말해 주지 않는다.',
+     look:'차림이 다른 한 사람을 찾자. 다만 차림만 보고 나이나 신분을 단정하지 말고, 자료로 확인될 때까지 질문으로 남겨 두자.'}
+  ],
+  q:'아이가 앉은 자세와 등 뒤에 펼쳐진 책. 둘을 합치면 떠오르는 서당의 일과는?',
+  opts:['벌로 벽을 보고 반성하기','책을 등지고 외워 보이는 배송','책 한 권을 떼고 여는 책걸이'], a:1,
+  reveal:'서당에는 책을 등지고 앉아 보지 않고 외워 보이는 배송이 있었다. 등 배(背), 외울 송(誦). 그림 속 아이가 앉은 자세가 바로 그 자세다. 한국민족문화대백과의 사진 설명도 바닥의 회초리 옆에 책이 놓인 것으로 미루어 전날 배운 것을 제대로 낭독하지 못해 혼이 난 것 같다고 추정한다. 다만 어디까지나 추정이다. 확인된 사실은 배송이라는 일과가 있었다는 것까지이고, 나머지는 그림을 보고 이어 붙인 추리다.',
+  open:'아이가 왜 우는지는 정해지지 않았다. 국가기록원은 종아리를 맞은 것으로 짐작된다고 쓰고, 한국민족문화대백과는 방금 회초리를 맞은 듯하다고 쓰며, 국립중앙박물관은 서러움이 완연하다고만 쓴다. 발목에 댄 손과 갓 쓴 학동이 무엇을 뜻하는지는 지금까지 확인한 기관 자료에 설명이 없다.',
+  steps:['전체를 본다. 훈장을 축으로 학동들이 둥글게 앉아 있고, 그 고리 안쪽에 우는 아이가 있다.','얼굴을 하나씩 센다. 우는 아이를 빼고 얼굴이 보이는 일곱 명의 표정을 확인한다.','크기를 떠올린다. 이 그림은 세로 26.9cm, 가로 22.2cm로 A4 용지 한 장과 비슷하다. 그 안에 열 사람이 들어 있다.']
+},
+{
+  id:'ssireum', no:'CASE 12', img:'img/ssireum.jpg', ratio:1920/2311,
+  name:'뒤바뀐 손의 구경꾼',
+  work:'씨름', artist:'김홍도', year:'조선 후기',
+  place:'《단원 풍속도첩》 · 국립중앙박물관 · 종이에 수묵담채 · 26.9 × 22.2 cm · 보물 · 이미지: 위키미디어 공용(퍼블릭 도메인)',
+  hook:'모두가 한가운데를 보는 씨름판. 그런데 한 구경꾼의 손이 이상하다.',
+  brief:'조선 후기 어느 씨름판. 구경꾼들이 둥글게 둘러앉았고, 가운데서 두 씨름꾼이 맞붙었다. 승부는 아직 나지 않았다. 그림을 눌러 단서 다섯 개를 찾아라.',
+  fx:[],
+  clues:[
+    {x:75,y:46,r:7,z:3,riddle:'땅을 떠난 것',title:'허공에 뜬 발',
+     found:'맞붙은 두 씨름꾼 가운데 한 사람의 다리가 땅에서 높이 들렸다. 다른 한 사람은 그의 허리와 다리 쪽을 붙잡고 버틴다.',
+     behind:'한국민족문화대백과는 이 그림을 구경꾼들이 원을 그리며 둘러앉고 그 중심에서 두 씨름꾼이 힘을 겨루는 장면으로 설명하고, 안간힘을 쓰는 씨름꾼의 표정이 생생하다고 쓴다.',
+     look:'움직이는 장면에서는 땅에 닿은 발과 떨어진 발을 세어 보자. 무게가 어느 쪽으로 쏠렸는지 보인다.'},
+    {x:86,y:74,r:8,z:2.4,riddle:'몸을 뒤로 뺀 사람들',title:'놀란 두 구경꾼',
+     found:'오른쪽 아래 두 구경꾼이 입을 벌리고 상체를 뒤로 젖혔다. 앞사람은 한 손으로 땅을 짚었다.',
+     behind:'국립중앙박물관은 이 그림의 좌중 분위기가 열띠다고 쓰고, 한국민족문화대백과는 군중이 흥미진진하게 바라본다고 쓴다. 두 사람이 왜 몸을 뒤로 젖혔는지는 기관 자료에 설명이 없다. 들린 씨름꾼이 자기들 쪽으로 넘어져 오는 것으로 읽은 칼럼도 있지만, 그림은 승부의 결과를 그리지 않았다.',
+     look:'주인공보다 구경꾼을 보자. 구경꾼의 반응이 다음 장면을 미리 알려 줄 때가 있다.'},
+    {x:73,y:83,r:5.5,z:3.6,riddle:'엄지가 어디 있나',title:'뒤바뀐 손',
+     found:'놀란 구경꾼의 손을 자세히 보자. 무릎 위에 얹은 손과 땅을 짚은 손이 있다. 엄지가 어느 쪽에 붙어 있는지 확인해 보자.',
+     behind:'이 구경꾼의 왼손과 오른손이 바뀌어 그려졌다고 지적한 칼럼이 있고, 같은 화첩의 〈무동〉에도 비슷한 곳이 있다고 비교한다. 기관 자료에는 이 손에 대한 설명이 없다. 실수인지 의도한 표현인지는 알 수 없다. 직접 엄지의 방향을 확인해 보자.',
+     look:'그림 속 손이 이상해 보이면 내 손을 같은 모양으로 놓아 보자. 엄지의 방향만 보면 왼손인지 오른손인지 알 수 있다.'},
+    {x:17,y:52,r:7,z:2.8,riddle:'혼자 서 있는 사람',title:'판을 멘 소년',
+     found:'왼쪽에 끈으로 판을 메고 선 소년이 있다. 앉아 있는 구경꾼들 사이에서 혼자 서서, 얼굴을 들어 위쪽을 올려다본다.',
+     behind:'국립중앙박물관은 이 소년을 엿장수라 부르고, 구경꾼들의 관심 밖에 있으면서 둥근 구도를 돕는 인물이라고 설명한다. 판 위의 물건이 무엇인지는 그림만으로 확정하기 어렵다.',
+     look:'모두가 한곳을 볼 때 다른 곳에 있는 사람을 찾자. 그 사람이 그림의 둥근 고리를 완성할 때가 있다.'},
+    {x:13,y:37,r:7,z:2.8,riddle:'머리 대신 땅 위에',title:'벗어 놓은 갓',
+     found:'왼쪽 위 구경꾼들 앞 땅바닥에 갓 두 개가 끈을 늘어뜨린 채 놓여 있다. 오른쪽 가장자리에는 벗어 놓은 신도 보인다.',
+     behind:'왼쪽 위 무리에는 갓을 쓴 사람이 있고, 오른쪽 위 무리에는 갓을 쓴 사람이 보이지 않는다. 갓을 왜 벗어 땅에 두었는지는 확인한 자료에 설명이 없다. 국립중앙박물관은 오른쪽의 벗어 놓은 신이 오른쪽으로 터진 여백을 좁히는 구실을 한다고 설명한다.',
+     look:'사람만 보지 말고 바닥에 놓인 물건도 보자. 그 물건이 이야기를 말하는지, 빈자리를 메우는지 두 쪽으로 물어 보자.'}
+  ],
+  q:'허공에 뜬 발과 몸을 뒤로 뺀 구경꾼. 이 그림이 붙잡은 순간은?',
+  opts:['승부가 끝나고 한 사람이 쓰러진 뒤','한 사람이 들려 승부가 막 갈리려는 순간','씨름꾼들이 맞붙기 전에 인사하는 순간'], a:1,
+  reveal:'그림은 결과를 그리지 않았다. 한 사람의 발이 땅을 떠났고, 오른쪽 아래 구경꾼들은 벌써 몸을 뒤로 뺀다. 승부가 갈리기 바로 전, 가장 긴장된 한순간이다. 누가 이기는지는 그려져 있지 않다.',
+  open:'들린 씨름꾼이 정말 질지, 구경꾼의 손이 일부러 바뀌었는지는 해설마다 다르다. 또 이 화첩의 그림들은 솜씨에 차이가 있어 모두 김홍도가 직접 그렸는지 의견이 갈린다. 한국민족문화대백과는 〈씨름〉·〈무동〉처럼 뛰어난 작품은 진작으로 보는 추정이 있다고 소개한다.',
+  steps:['가운데의 두 씨름꾼을 본다. 땅에 닿은 발과 들린 발을 확인한다.','구경꾼의 둥근 고리를 한 바퀴 돈다. 누가 웃고 누가 놀랐는지 본다.','고리 밖을 본다. 혼자 서 있는 소년, 땅에 놓인 갓과 신.']
+},
+{
+  id:'daejanggan', no:'CASE 13', img:'img/daejanggan.jpg', ratio:1702/1920,
+  name:'화덕 뒤에 숨은 아이',
+  work:'대장간', artist:'김홍도', year:'조선 후기',
+  place:'《단원 풍속도첩》 · 국립중앙박물관 · 종이 · 27.9 × 24 cm · 보물 · 이미지 출처: 국립중앙박물관(공공누리 제1유형)',
+  hook:'화덕 뒤에 아이가 하나 숨어 있다. 손은 보이는데 발은 보이지 않는다.',
+  brief:'조선 후기 어느 대장간. 배경 없이 다섯 사람이 화덕과 모루를 둘러쌌다. 쇠를 달구고, 두드리고, 간다. 그림을 눌러 단서 다섯 개를 찾아라.',
+  fx:[],
+  clues:[
+    {x:34,y:42,r:7,z:3,riddle:'불 뒤에 숨은 사람',title:'줄을 잡은 아이',
+     found:'화덕 기둥 뒤에서 아이 하나가 상반신만 내밀었다. 한 손으로 위쪽 가로대에 매단 줄을 잡았다. 다리와 발은 화덕에 가려 보이지 않는다.',
+     behind:'국립중앙박물관은 이 아이를 견습생인 듯한 가장 어린 사람으로 보고, 풀무에 바람을 넣는 듯 줄을 잡아당긴다고 쓴다. 한국민족문화대백과의 「풀무」 항목은 이 그림을 「단야도」라 부르며, 동자가 발풀무를 밟는 모습의 일부가 보인다고 쓴다. 풀무에는 손잡이를 밀고 당기는 손풀무와 발로 밟는 발풀무가 있었다.',
+     look:'설명이 서로 다르면 그림으로 돌아가자. 보이는 것과 가려진 것을 나눠 세면 어디까지가 그림이고 어디부터가 짐작인지 보인다.'},
+    {x:47,y:74,r:5.5,z:3.4,riddle:'붉게 칠한 곳',title:'집게에 물린 쇠',
+     found:'왼쪽에 앉은 사람이 긴 집게로 모루 위의 쇳덩이를 잡았다. 쇳덩이는 붉게 칠해져 있다.',
+     behind:'국립중앙박물관은 이 사람을 달군 쇠를 모루 위에 대주는 사람이라고 쓴다. 한국민족문화대백과는 대장간 일을 풀무로 화로의 불을 피워 쇠를 달군 뒤 메질과 담금질을 이어 가는 것으로 설명한다.',
+     look:'색을 아낀 그림에서는 색이 들어간 곳부터 찾아보자.'},
+    {x:92,y:71,r:6,z:3,riddle:'망치는 몇 자루?',title:'두 자루의 망치',
+     found:'망치가 두 자루다. 하나는 모루 위에 내려와 있고, 하나는 오른쪽 사람의 손에 들려 뒤로 젖혀져 있다. 오른쪽 두 사람은 앞뒤로 겹쳐 섰다.',
+     behind:'국립중앙박물관은 이들을 쇠망치로 내리치는 사람들이라고 쓴다. 한국민족문화대백과는 대장간의 기본 연장으로 모루·메·망치·집게를 들고, 메에는 앞메와 옆메가 있다고 적는다. 모루 쪽 망치를 쥔 손이 앞사람 것인지 뒷사람 것인지는 그림만으로 분명하지 않다.',
+     look:'같은 동작의 앞과 뒤가 한 화면에 함께 그려져 있는지 보자. 멈춘 그림에서 움직임의 차례를 읽는 방법이다.'},
+    {x:29,y:92,r:6.5,z:3,riddle:'새것이 아닌 일',title:'숫돌에 가는 날',
+     found:'아래쪽 사람이 쪼그려 앉아 휜 날을 바닥의 긴 숫돌에 간다. 곁에는 병이 하나 놓여 있다.',
+     behind:'국립중앙박물관은 다 된 연장을 숫돌에 가는 사람이라고 쓴다. 한국민족문화대백과에 따르면 옛날에는 시골 장터나 마을마다 대장간이 있어 무딘 농기구나 연장을 불에 달구어 벼리기도 하고 새로 만들기도 했다. 전통 대장장이가 호미 하나를 만드는 데는 줄잡아 한 시간이 걸렸다고 한다.',
+     look:'손에 든 물건의 모양을 보자. 무엇을 하는 곳인지 사람보다 물건이 먼저 알려 줄 때가 있다.'},
+    {x:15,y:81,r:5.5,z:3,riddle:'바닥에 놓인 긴 통',title:'담금질 함지',
+     found:'아래쪽 사람 뒤에 길쭉한 나무 통이 놓였고, 그 위에 긴 집게 여러 개가 걸쳐 있다.',
+     behind:'국립중앙박물관은 이것을 담금질하는 데 쓰이는 기다란 목제 함지박이라고 설명한다. 한국민족문화대백과는 대장장이가 오랜 숙련을 통해 담금질로 쇠의 강도나 성질을 조절한다고 쓴다.',
+     look:'바닥에 놓인 도구를 이어 보자. 화덕, 모루, 함지, 숫돌. 그림 한 장에 일의 차례가 놓여 있다.'}
+  ],
+  q:'화덕 뒤 아이의 발은 그림에 어떻게 그려져 있나?',
+  opts:['발판을 밟고 있다','화덕에 가려 그려져 있지 않다','줄을 발에 감았다'], a:1,
+  reveal:'아이의 손은 줄을 잡았고, 발은 화덕에 가려 그려져 있지 않다. 그래서 같은 아이를 두고 설명이 갈린다. 국립중앙박물관은 줄을 잡아당겨 풀무에 바람을 넣는 듯하다고 쓰고, 한국민족문화대백과는 발풀무를 밟는 모습의 일부라고 쓴다. 그림이 보여 주는 것은 줄을 잡은 손까지다.',
+  open:'이 아이가 손으로 바람을 냈는지 발로 냈는지는 그림만으로 정할 수 없다. 모루 쪽 망치를 쥔 손의 주인도 분명하지 않다. 또 이 화첩의 그림들은 모두 김홍도가 직접 그렸는지 의견이 갈린다.',
+  steps:['배경이 없는 것부터 본다. 국립중앙박물관도 아무런 배경 없이 일하는 사람들만 그렸다고 쓴다.','화덕을 축으로 다섯 사람을 한 바퀴 돈다. 줄, 집게, 망치 둘, 숫돌.','크기를 떠올린다. 세로 27.9cm, 가로 24cm로 A4 용지보다 가로는 넓고 세로는 조금 짧다.']
 }];
 const RANKS=[[0,'견습 탐정'],[150,'수습 감정사'],[350,'큐레이터 탐정'],[600,'명화 수사관'],[850,'수석 감정관']];
 const $=(s,r=document)=>r.querySelector(s);
@@ -732,14 +845,14 @@ function home(){
     <button class="case ${s?'solved':''}" data-open="${c.id}">
       <div class="thumb"><img src="${c.img}" alt="${esc(c.work)}">${s?`<span class="stamp">해결 ${s.rank}</span>`:''}</div>
       <div class="body"><span class="mono">${c.no}</span><h3>${esc(c.name)}</h3><p class="hook">${esc(c.hook)}</p>
-        <div class="meta"><span class="mono">${s?esc(c.artist+' · '+c.year):'단서 5개'}</span><span class="status ${s?'done':''}">${s?'다시 수사':'미해결'}</span></div></div>
+        <div class="meta"><span class="mono">${esc(c.artist)} · <span class="nw">${esc(c.year)}</span></span><span class="status ${s?'done':''}">${s?'다시 수사':'미해결'}</span></div></div>
     </button>`}).join('')}</div>
   <div class="sec-head"><h2>도감</h2><span class="mono">수집 ${solved.length} / ${CASES.length}</span></div>
   <div class="shelf">${CASES.map(c=>{const s=save.cases[c.id];return s?`
     <button class="card" data-review="${c.id}"><img src="${c.img}" alt=""><span class="rk">${s.rank}</span><b>${esc(c.work)}</b><span>${esc(c.artist)} · ${c.year}</span></button>`:`
     <div class="card locked"><b>?</b><span class="mono">${c.no}<br>사건을 해결하면 수집</span></div>`}).join('')}
 </div>
-  <p class="note">수집한 카드를 누르면 사건 보고서와 감상법을 다시 볼 수 있다. 그림 이미지는 퍼블릭 도메인이며 위키미디어 공용에서 가져왔다.</p>
+  <p class="note">수집한 카드를 누르면 사건 보고서와 감상법을 다시 볼 수 있다. 서양 명화 이미지는 퍼블릭 도메인이며 위키미디어 공용에서 가져왔다. 김홍도의 〈서당〉 이미지 출처는 국립중앙박물관(공공누리 제1유형), 〈씨름〉은 위키미디어 공용(퍼블릭 도메인)이다.</p>
   <div class="row"><button class="ghost" id="tostats">측정 보기</button><span class="note">${CAN_EDIT&&DB?'기록을 남길 수 있는 방문자 전체의 합계를 본다.':'이 브라우저에 쌓인 플레이 기록을 본다.'}</span></div>`;
   $('#tostats').onclick=stats;
   show('home');
@@ -832,7 +945,9 @@ function panel(){
       <p class="note">단서를 다시 보려면 그림 위의 번호를 누른다.</p>`;
     d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(+b.dataset.o===c.a)return finish();P.wrong++;b.classList.add('no');b.disabled=true});
     return}
-  d.innerHTML=`<span class="tag">사건 개요</span><h3>${esc(c.name)}</h3><p class="brief">${esc(c.brief)}</p>
+  d.innerHTML=`<span class="tag">사건 개요</span><h3>${esc(c.name)}</h3>
+    <div class="label" aria-label="작품 정보"><b>〈${esc(c.work)}〉</b><span>${esc(c.artist)} · ${esc(c.year)}</span><small>${esc(c.place)}</small></div>
+    <p class="brief">${esc(c.brief)}</p>
     <ul class="clues">${c.clues.map((k,i)=>{const g=P.found.includes(i);return `<li class="${g?'got':''}" ${g?`data-i="${i}" tabindex="0"`:''}><span class="n">${g?'✓':'0'+(i+1)}</span><span>${esc(g?k.title:k.riddle)}</span></li>`}).join('')}</ul>
     <div class="row"><button class="ghost" id="hint">힌트 보기</button><span class="note">힌트를 쓰면 등급이 내려간다 · 사용 ${P.hints}회</span></div>`;
   $('#hint').onclick=()=>{hint();panel()};
